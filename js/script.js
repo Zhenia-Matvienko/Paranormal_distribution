@@ -2,8 +2,8 @@
 function w3_open() {
     document.getElementById("main").style.marginLeft = "10%";
     document.getElementById("mySidebar").style.width = "10%";
-      document.getElementById("mySidebar").style.display = "block";
-      document.getElementById("openNav").style.display = 'none';
+        document.getElementById("mySidebar").style.display = "block";
+        document.getElementById("openNav").style.display = 'none';
 }
 function w3_close() {
       document.getElementById("main").style.marginLeft = "0%";
@@ -15,6 +15,14 @@ var tabledata = [
     {id:2, name:"Volodymyr matus", subject:"PTZA", grade:110},
 
 ];
+
+var chartData = [
+    {id:1, grade:100},
+    {id:2, grade:110}
+]
+
+
+
 var table = new Tabulator("#example-table", {
     data:tabledata,           //load row data from array
     layout:"fitColumns",      //fit columns to width of table
@@ -42,6 +50,33 @@ var table = new Tabulator("#example-table", {
 document.getElementById("add-row").addEventListener("click", function(){
     table.addRow({}, false);
 });
+
+
+
+var barColors = ["red", "green","blue","orange","brown"];
+var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
+var yValues = [55, 49, 44, 24, 15];
+new Chart("myChart",
+    {
+        type: "bar",
+        data: {
+            labels: xValues,
+            datasets: [{
+                backgroundColor: "lightblue",
+                data: yValues
+            }]
+        },
+        options: {
+            legend: {
+                display: true,
+                labels: xValues
+            },
+            title: {
+                display: true,
+                text: "Chart"
+            }
+        }
+    });
 
 
 
