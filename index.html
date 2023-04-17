@@ -43,7 +43,18 @@
     <div id="example-table" class="table"></div>
 
 
-    <canvas id="myChart" style="width:100%;max-width:1500px"></canvas>
+    <canvas id="myChart" style="width:100%;max-width:1500px; margin: 0;"></canvas>
+    <div class="blur" id="blur"></div>
+    <div class="overlay" id="overlay">
+        <div class="popup">
+            <label for="w3review" style="position: relative; top: 10px; left: 50px;">Напишіть вашу скаргу чи пропозицію:</label><br><br>
+            <textarea id="w3review" name="w3review" rows="4" cols="50" class="responsetext"></textarea>
+            <button id="responseClose" class="btnresponseClose" onclick="respoonseClose()">Надіслати</button>
+        </div>
+    </div>
+    <div>
+        <button id="responseOpen" class="btnresponse" onclick="respoonseOpen()">Відгук</button>
+    </div>
     <script src="js/script.js"></script>
 
 

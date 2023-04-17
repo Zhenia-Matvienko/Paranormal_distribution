@@ -21,6 +21,17 @@ var chartData = [
     {id:2, grade:110}
 ]
 
+function respoonseOpen(){
+    document.getElementById("blur").style.display = "block";
+    document.getElementById("responseOpen").style.display = "none";
+    document.getElementById("overlay").style.display = "block";
+}
+function respoonseClose(){
+    document.getElementById("overlay").style.display = "none";
+    document.getElementById("blur").style.display = "none";
+    document.getElementById("responseOpen").style.display = "block";
+}
+
 
 
 var table = new Tabulator("#example-table", {
@@ -78,5 +89,10 @@ new Chart("myChart",
         }
     });
 
-
+    function changeElement(id) {
+        var el = document.getElementById(id);
+        el.style.color = "red";
+        el.style.fontSize = "25px";
+        el.style.zIndex = "300";
+      }
 
