@@ -11,15 +11,64 @@ function w3_close() {
       document.getElementById("openNav").style.display = "inline-block";
 }
 var tabledata = [
-    {id:1, name:"Anatolii Kasatkin", subject:"CS", grade:100},
-    {id:2, name:"Volodymyr matus", subject:"PTZA", grade:110},
+    {id:1, name:"Kasatkin Anatolii", subject:"CS", grade:97},
+    {id:2, name:"Volodymyr Matus", subject:"PTZA", grade:92},
+    {id:3, name:"Pylypchuk Anton", subject:"SPZ", grade:73},
+    {id:4, name:"Evgeniy Matvienko", subject:"OPD", grade:88},
+    {id:5, name:"Kosyak Andrii", subject:"PTZA", grade:80},
 
 ];
 
-var chartData = [
-    {id:1, grade:100},
-    {id:2, grade:110}
-]
+function compareNumbers(a, b) {
+    return a - b;
+}
+function getGradesFromData(obj) {
+    var grades = [];
+
+    for (let i = 0; i < obj.length; i++) {
+        grades.push(Object.values(obj[i])[3]);
+    }
+    return grades.sort(compareNumbers);
+}
+
+
+function getIdFromData(obj) {
+    var id = [];
+
+    for (let i = 0; i < obj.length; i++) {
+        id.push(Object.values(obj[i])[0]);
+    }
+    return id.sort(compareNumbers);
+}
+
+function getAmountOfGrades(grades) {
+    var amount = [];
+    var grade60 = 0;
+    var grade70 = 0;
+    var grade80 = 0;
+    var grade90 = 0;
+
+    for (let i = 0; i < grades.length; i++) {
+        if (grades[i] >= 60 & grades[i] <= 70) {
+            grade60 += 1;
+        }
+        else if (grades[i] >= 71 & grades[i] <= 80) {
+            grade70 += 1;
+        }
+        else if (grades[i] >= 81 & grades[i] <= 90) {
+            grade80 += 1;
+        }
+        else if (grades[i] >= 91 & grades[i] <= 100) {
+            grade90 += 1;
+        }
+    }
+
+    amount.push(grade60,grade70,grade80, grade90);
+    return amount;
+}
+
+
+
 
 function respoonseOpen(){
     document.getElementById("blur").style.display = "block";
@@ -64,30 +113,29 @@ document.getElementById("add-row").addEventListener("click", function(){
 
 
 
-var barColors = ["red", "green","blue","orange","brown"];
-var xValues = ["Italy", "France", "Spain", "USA", "Argentina"];
-var yValues = [55, 49, 44, 24, 15];
 new Chart("myChart",
     {
         type: "bar",
         data: {
-            labels: xValues,
+            labels: ["60-70", "71-80", "81-90", "91-100"],
             datasets: [{
+                label: 'Amount of students',
                 backgroundColor: "lightblue",
-                data: yValues
+                data: getAmountOfGrades(getGradesFromData(tabledata)),
             }]
         },
         options: {
-            legend: {
-                display: true,
-                labels: xValues
-            },
             title: {
                 display: true,
-                text: "Chart"
+                text: "Distribution"
             }
         }
     });
+
+
+
+
+
 
     function changeElement(id) {
         var el = document.getElementById(id);

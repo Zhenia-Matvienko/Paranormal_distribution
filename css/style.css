@@ -13,7 +13,7 @@ header{
     flex-wrap: nowrap;
     vertical-align: middle;
     justify-content: space-between;
-    height: 32px;
+    height: 40px;
     margin-left: 20px;
     margin-right: 20px;
     padding-left: 10px;
@@ -53,7 +53,7 @@ header{
     float: left;
     border: 1px solid #f8f9fa;
     border-radius: 10px;
-    height: 32px;
+    height: 40px;
     width: 100%; 
 }
 .text-end{
@@ -94,6 +94,7 @@ header{
 }
 .columns{
     column-count: 1;
+    padding-top: 15px;
 }
 .sidebar{
     height: 100%;
@@ -102,6 +103,7 @@ header{
     position: fixed!important;
     z-index: 1;
     overflow: auto;
+
 }
 .btnclose{
     padding: 6px 12px 6px 12px;
@@ -109,12 +111,15 @@ header{
     color: #f8f9fa;
     font-size: 1rem;
     white-space: nowrap;
-    margin: 0 auto;
+    margin: 0 auto 20px;
     margin-top: 16px;
-    display: block;
+    display: flex;
     border-radius: 10px;
     border: 1px solid #f8f9fa;
     cursor: pointer;
+    justify-content: center;
+    align-items: center;
+    height: 40px;
 }
 table, th, td {
     border: 1px solid;
@@ -133,8 +138,7 @@ table, th, td {
     color: #2c2a2a;
     font-size: 1rem;
     white-space: nowrap;
-    margin: 20px 20px 0 auto;
-    margin-left: auto;
+    margin: 20px 20px 0 90vw;
     border-radius: 10px;
     border: 1px solid #2c2a2a;
     cursor: pointer;
@@ -157,10 +161,7 @@ table, th, td {
     display: block;
     width: 100px;
     height: 30px;
-    margin: 0 ;
-    position: relative;
-    top: 90%;
-    left: 90%;
+    margin: 0 0 5vh 90vw;
 }
 .btnresponseClose{
     display: block;
@@ -203,5 +204,25 @@ table, th, td {
     box-sizing: border-box;
     background-color: #2c2a2a;
     color: #fff;
+}
+
+canvas {
+    background-color: whitesmoke;
+    margin: 50px auto;
+    width: 60%;
+    max-width: 1300px;
+}
+
+main {
+
+}
+
+#openNav {
+    padding: 0;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 80px;
+    height: 40px;
 }
 
