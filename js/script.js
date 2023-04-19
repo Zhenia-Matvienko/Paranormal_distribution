@@ -74,6 +74,7 @@ function respoonseOpen(){
     document.getElementById("blur").style.display = "block";
     document.getElementById("responseOpen").style.display = "none";
     document.getElementById("overlay").style.display = "block";
+    window.scrollTo(0, -200);
 }
 function respoonseClose(){
     document.getElementById("overlay").style.display = "none";
