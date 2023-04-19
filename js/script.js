@@ -100,11 +100,26 @@ var table = new Tabulator("#example-table", {
     //columnDefaults:{
     //    tooltip:true,         //show tool tips on cells
     //},
+    rowFormatter:function(row){
+            row.getElement().style.backgroundColor = "#3B3486";
+    },
     columns:[                 //define the table columns
-        {title:"ID", field:"id",  width:50, editor:"input"},
-        {title:"Name", field:"name", editor:"input"},
-        {title:"Subject", field:"subject", editor:"input", headerSort:false},
-        {title:"Grade", field:"grade", width:95, editor:"input"},
+        {title:"ID", field:"id",  width:50, editor:"input", formatter:function(cell, formatterParams){
+            var value = cell.getValue();
+            return "<span style='color:#ffffff;'>" + value + "</span>";
+         }},
+        {title:"Name", field:"name", width:150, formatter:function(cell, formatterParams){
+            var value = cell.getValue();
+            return "<span style='color:#ffffff;'>" + value + "</span>";
+         }},
+        {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
+            var value = cell.getValue();
+            return "<span style='color:#ffffff;'>" + value + "</span>";
+         }},
+        {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
+            var value = cell.getValue();
+            return "<span style='color:#ffffff;'>" + value + "</span>";
+         }},
 
     ],
 });
@@ -132,16 +147,4 @@ new Chart("myChart",
             }
         }
     });
-
-
-
-
-
-
-    function changeElement(id) {
-        var el = document.getElementById(id);
-        el.style.color = "red";
-        el.style.fontSize = "25px";
-        el.style.zIndex = "300";
-      }
 
