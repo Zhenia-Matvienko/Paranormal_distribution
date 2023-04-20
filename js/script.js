@@ -136,14 +136,37 @@ new Chart("myChart",
             labels: ["60-70", "71-80", "81-90", "91-100"],
             datasets: [{
                 label: 'Amount of students',
-                backgroundColor: "lightblue",
+                backgroundColor: "#FFE9B1",
+                borderRadius: 15,
+                fontColor: "#FCFDF2",
+                borderWidth: 4,
                 data: getAmountOfGrades(getGradesFromData(tabledata)),
             }]
         },
         options: {
             title: {
                 display: true,
-                text: "Distribution"
+                text: "Distribution",
+                fontColor: "#FCFDF2"
+            },
+            legend: {
+                labels: {
+                    fontColor: "#FCFDF2"
+                },
+            },
+            scales: {
+                yAxes: [{
+
+                    ticks: {
+
+                        fontColor: "#FCFDF2"
+                    },
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: "#FCFDF2"
+                    },
+                }]
             }
         }
     });
