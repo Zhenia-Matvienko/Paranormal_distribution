@@ -6,6 +6,9 @@ from django.core.validators import MinValueValidator, MaxValueValidator
 class StudyGroup(models.Model):
     study_group_name = models.CharField(max_length=23)
 
+    def __str__(self):
+        return self.study_group_name
+
 
 class CustomUser(AbstractUser):
     study_group = models.ForeignKey(StudyGroup, on_delete=models.CASCADE, blank=True, null=True)
@@ -17,6 +20,9 @@ class Subject(models.Model):
     subject_name = models.CharField(max_length=100)
     is_private = models.BooleanField(default=False)
     accept_grades = models.BooleanField(default=False)
+
+    def __str__(self):
+        return self.subject_name
 
 
 class Grade(models.Model):
