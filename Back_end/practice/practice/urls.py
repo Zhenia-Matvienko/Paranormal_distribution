@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 
-from practice.distribution.views import *
+from distribution.views import StudyGroupListCreateAPIView, UserListCreateAPIView, \
+    UserRetrieveUpdateDestroyAPIView, SubjectListCreateAPIView, GradeListCreateAPIView, \
+    GradeRetrieveUpdateDestroyAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
