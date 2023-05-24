@@ -1,4 +1,7 @@
 
+
+
+
 function w3_open() {
     document.getElementById("main").style.marginLeft = "10%";
     document.getElementById("main1").style.marginLeft = "10%";
