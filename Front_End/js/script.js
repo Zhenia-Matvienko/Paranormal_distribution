@@ -1,9 +1,9 @@
 
 
-
-
 function w3_open() {
     document.getElementById("main").style.marginLeft = "10%";
+    document.getElementById("main").style.width = "90%";
+    document.getElementById("main1").style.width = "90%";
     document.getElementById("main1").style.marginLeft = "10%";
     document.getElementById("mySidebar").style.width = "10%";
         document.getElementById("mySidebar").style.display = "block";
@@ -11,7 +11,9 @@ function w3_open() {
 }
 function w3_close() {
       document.getElementById("main").style.marginLeft = "0%";
-      document.getElementById("main1").style.marginLeft = "0%";
+    document.getElementById("main1").style.marginLeft = "0%";
+      document.getElementById("main1").style.width = "100%";
+        document.getElementById("main").style.width = "100%";
       document.getElementById("mySidebar").style.display = "none";
       document.getElementById("openNav").style.display = "inline-block";
 }
@@ -24,53 +26,7 @@ var tabledata = [
 
 ];
 
-function compareNumbers(a, b) {
-    return a - b;
-}
-function getGradesFromData(obj) {
-    var grades = [];
 
-    for (let i = 0; i < obj.length; i++) {
-        grades.push(Object.values(obj[i])[3]);
-    }
-    return grades.sort(compareNumbers);
-}
-
-
-function getIdFromData(obj) {
-    var id = [];
-
-    for (let i = 0; i < obj.length; i++) {
-        id.push(Object.values(obj[i])[0]);
-    }
-    return id.sort(compareNumbers);
-}
-
-function getAmountOfGrades(grades) {
-    var amount = [];
-    var grade60 = 0;
-    var grade70 = 0;
-    var grade80 = 0;
-    var grade90 = 0;
-
-    for (let i = 0; i < grades.length; i++) {
-        if (grades[i] >= 60 & grades[i] <= 70) {
-            grade60 += 1;
-        }
-        else if (grades[i] >= 71 & grades[i] <= 80) {
-            grade70 += 1;
-        }
-        else if (grades[i] >= 81 & grades[i] <= 90) {
-            grade80 += 1;
-        }
-        else if (grades[i] >= 91 & grades[i] <= 100) {
-            grade90 += 1;
-        }
-    }
-
-    amount.push(grade60,grade70,grade80, grade90);
-    return amount;
-}
 
 
 
@@ -134,7 +90,98 @@ document.getElementById("add-row").addEventListener("click", function(){
 
 
 
+
+function compareNumbers(a, b) {
+    return a - b;
+}
+function getGradesFromData(obj) {
+    var grades = [];
+
+    for (let i = 0; i < obj.length; i++) {
+        grades.push(Object.values(obj[i])[3]);
+    }
+    return grades.sort(compareNumbers);
+}
+
+
+function getIdFromData(obj) {
+    var id = [];
+
+    for (let i = 0; i < obj.length; i++) {
+        id.push(Object.values(obj[i])[0]);
+    }
+    return id.sort(compareNumbers);
+}
+
+function getAmountOfGrades(grades) {
+    var amount = [];
+    var grade60 = 0;
+    var grade70 = 0;
+    var grade80 = 0;
+    var grade90 = 0;
+
+    for (let i = 0; i < grades.length; i++) {
+        if (grades[i] >= 60 & grades[i] <= 70) {
+            grade60 += 1;
+        }
+        else if (grades[i] >= 71 & grades[i] <= 80) {
+            grade70 += 1;
+        }
+        else if (grades[i] >= 81 & grades[i] <= 90) {
+            grade80 += 1;
+        }
+        else if (grades[i] >= 91 & grades[i] <= 100) {
+            grade90 += 1;
+        }
+    }
+
+    amount.push(grade60,grade70,grade80, grade90);
+    return amount;
+}
+
 new Chart("myChart",
+    {
+        type: "bar",
+        data: {
+            labels: ["60-70", "71-80", "81-90", "91-100"],
+            datasets: [{
+                label: 'Amount of students',
+                backgroundColor: "#FFE9B1",
+                borderRadius: 15,
+                fontColor: "#FCFDF2",
+                borderWidth: 4,
+                data: getAmountOfGrades(getGradesFromData(tabledata)),
+            }]
+        },
+        options: {
+            title: {
+                display: true,
+                text: "Distribution",
+                fontColor: "#FCFDF2"
+            },
+            legend: {
+                labels: {
+                    fontColor: "#FCFDF2"
+                },
+            },
+            scales: {
+                yAxes: [{
+
+                    ticks: {
+
+                        fontColor: "#FCFDF2"
+                    },
+                }],
+                xAxes: [{
+                    ticks: {
+                        fontColor: "#FCFDF2"
+                    },
+                }]
+            }
+        }
+    });
+
+new Chart("personalChart",
     {
         type: "bar",
         data: {

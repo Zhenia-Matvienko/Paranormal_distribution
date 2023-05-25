@@ -10,9 +10,8 @@
         <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
         <link rel="stylesheet" href="css/style.css">
         <script src="js/script.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/2.9.4/Chart.js"></script>
 
-        <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+        <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
 
 <!--        font-->
         <link rel="preconnect" href="https://fonts.googleapis.com">
@@ -25,7 +24,7 @@
 	<div class="sidebar" style="display:none" id="mySidebar">
   		<button class="btnclose" onclick="w3_close()">Close &times;</button>
   		<a href="#" class="textheader columns">Головна</a>
-  		<a href="#" class="textheader columns">Графіки</a>
+  		<a href="chart.html" class="textheader columns">Графіки</a>
   		<a href="#" class="textheader columns">Редагування оцінок</a>
 	</div>
     <header class="" id="main">
@@ -51,34 +50,15 @@
   	</header>
     <div class="blur" id="blur"></div>
     <main id = "main1">
-        <div class="try">
-            <button id="add-row" type="button" class="btnaddrow">New row</button>
-        </div>
-        <div id="example-table" class="table"></div>
 
 
         <canvas id="myChart"></canvas>
 
-
-
-        <div class="overlay" id="overlay">
-            <div class="popup">
-                <label for="w3review" style="position: relative; top: 10px; left: 50px;">Напишіть вашу скаргу чи
-                    пропозицію:</label><br><br>
-                <textarea id="w3review" name="w3review" rows="4" cols="50" class="responsetext"></textarea>
-                <button id="responseClose" class="btnresponseClose" onclick="respoonseClose()">Надіслати</button>
-            </div>
-        </div>
-
-        <div>
-            <button id="responseOpen" class="btnresponse" onclick="respoonseOpen()">Відгук</button>
-        </div>
     </main>
 
+
+
+
     <script src="js/script.js"></script>
-
-
-
-
     </body>
 </html>
