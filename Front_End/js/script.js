@@ -1,3 +1,4 @@
+let subject_id;
 
 
 function w3_open() {
@@ -6,16 +7,16 @@ function w3_open() {
     document.getElementById("main1").style.width = "90%";
     document.getElementById("main1").style.marginLeft = "10%";
     document.getElementById("mySidebar").style.width = "10%";
-        document.getElementById("mySidebar").style.display = "block";
-        document.getElementById("openNav").style.display = 'none';
+    document.getElementById("mySidebar").style.display = "block";
+    document.getElementById("openNav").style.display = 'none';
 }
 function w3_close() {
-      document.getElementById("main").style.marginLeft = "0%";
+    document.getElementById("main").style.marginLeft = "0%";
     document.getElementById("main1").style.marginLeft = "0%";
-      document.getElementById("main1").style.width = "100%";
-        document.getElementById("main").style.width = "100%";
-      document.getElementById("mySidebar").style.display = "none";
-      document.getElementById("openNav").style.display = "inline-block";
+    document.getElementById("main1").style.width = "100%";
+    document.getElementById("main").style.width = "100%";
+    document.getElementById("mySidebar").style.display = "none";
+    document.getElementById("openNav").style.display = "inline-block";
 }
 var tabledata = [
     {id:1, name:"Kasatkin Anatolii", subject:"CS", grade:97},
@@ -62,25 +63,25 @@ var table = new Tabulator("#example-table", {
     //    tooltip:true,         //show tool tips on cells
     //},
     rowFormatter:function(row){
-            row.getElement().style.backgroundColor = "#3B3486";
+        row.getElement().style.backgroundColor = "#3B3486";
     },
     columns:[                 //define the table columns
         {title:"ID", field:"id",  width:50, editor:"input", formatter:function(cell, formatterParams){
-            var value = cell.getValue();
-            return "<span style='color:#ffffff;'>" + value + "</span>";
-         }},
+                var value = cell.getValue();
+                return "<span style='color:#ffffff;'>" + value + "</span>";
+            }},
         {title:"Name", field:"name", width:150, formatter:function(cell, formatterParams){
-            var value = cell.getValue();
-            return "<span style='color:#ffffff;'>" + value + "</span>";
-         }},
+                var value = cell.getValue();
+                return "<span style='color:#ffffff;'>" + value + "</span>";
+            }},
         {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
-            var value = cell.getValue();
-            return "<span style='color:#ffffff;'>" + value + "</span>";
-         }},
+                var value = cell.getValue();
+                return "<span style='color:#ffffff;'>" + value + "</span>";
+            }},
         {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
-            var value = cell.getValue();
-            return "<span style='color:#ffffff;'>" + value + "</span>";
-         }},
+                var value = cell.getValue();
+                return "<span style='color:#ffffff;'>" + value + "</span>";
+            }},
 
     ],
 });
@@ -114,11 +115,11 @@ function getIdFromData(obj) {
 }
 
 function getAmountOfGrades(grades) {
-    var amount = [];
-    var grade60 = 0;
-    var grade70 = 0;
-    var grade80 = 0;
-    var grade90 = 0;
+    let amount = [];
+    let grade60 = 0;
+    let grade70 = 0;
+    let grade80 = 0;
+    let grade90 = 0;
 
     for (let i = 0; i < grades.length; i++) {
         if (grades[i] >= 60 & grades[i] <= 70) {
@@ -166,7 +167,6 @@ new Chart("myChart",
             },
             scales: {
                 yAxes: [{
-
                     ticks: {
 
                         fontColor: "#FCFDF2"
@@ -181,171 +181,129 @@ new Chart("myChart",
         }
     });
 
+
+
 let subjects = [
-        {
-            id: 1,
-            "subject_name": "Math",
-            "is_private": false,
-            "accept_grades": true
-        },
-        {
-            "id": 2,
-            "subject_name": "KS",
-            "is_private": false,
-            "accept_grades": false
-        },
-        {
-            "id": 3,
-            "subject_name": "PTZA",
-            "is_private": false,
-            "accept_grades": true
-        },
-        {
-            "id": 4,
-            "subject_name": "SPZ",
-            "is_private": false,
-            "accept_grades": true
-        }
-    ]
-let users = [
     {
-        "id": 2,
-        "email": "skete2002@gmail.com",
-        "username": "pilcher",
-        "study_group": {
-            "id": 1,
-            "study_group_name": "123"
-        }
+        id: 1,
+        subject_name: "Math",
+        is_private: false,
+        accept_grades: true
     },
     {
-        "id": 3,
-        "email": "example1@example.com",
-        "username": "user1",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
+        id: 2,
+        subject_name: "KS",
+        is_private: false,
+        accept_grades: true
     },
     {
-        "id": 4,
-        "email": "example2@example.com",
-        "username": "user2",
-        "study_group": {
-            "id": 1,
-            "study_group_name": ""
-        }
+        id: 3,
+        subject_name: "PTZA",
+        is_private: false,
+        accept_grades: true
     },
     {
-        "id": 5,
-        "email": "example3@example.com",
-        "username": "user3",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
+        id: 4,
+        subject_name: "SPZ",
+        is_private: false,
+        accept_grades: true
     },
     {
-        "id": 6,
-        "email": "example4@example.com",
-        "username": "user4",
-        "study_group": {
-            "id": 1,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 7,
-        "email": "example5@example.com",
-        "username": "user5",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 8,
-        "email": "example6@example.com",
-        "username": "user6",
-        "study_group": {
-            "id": 1,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 9,
-        "email": "example7@example.com",
-        "username": "user7",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 10,
-        "email": "example8@example.com",
-        "username": "user8",
-        "study_group": {
-            "id": 1,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 11,
-        "email": "example9@example.com",
-        "username": "user9",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 12,
-        "email": "example10@example.com",
-        "username": "user10",
-        "study_group": {
-            "id": 1,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 13,
-        "email": "example11@example.com",
-        "username": "user11",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 14,
-        "email": "example12@example.com",
-        "username": "user12",
-        "study_group": {
-            "id": 1,
-            "study_group_name": ""
-        }
-    },
-    {
-        "id": 15,
-        "email": "example13@example.com",
-        "username": "user13",
-        "study_group": {
-            "id": 2,
-            "study_group_name": ""
-        }
+        id: 7,
+        subject_name: "OPD",
+        is_private: false,
+        accept_grades: true
     }
 ]
 
-const ctx = document.getElementById('personalChart');
+// document.getElementById('subject_name').innerHTML += `<p>${subjects[0].subject_name}</p>`;
+for (const subject of subjects) {
+    document.getElementById('dropdown_list').innerHTML += `<a href="#" onclick="confirmSubject(${subject.id})" id="subject_name_in_list_${subject.id}">${subject.subject_name}</a>`;
+}
 
-new Chart(ctx, {
+
+const data = {
+    id: 1,
+    email: "example1@gmail.com",
+    username: "user1",
+    study_group: {
+        id: 1,
+        study_group_name: "123"
+    }
+};
+
+const users = [];
+const studyGroupIds = [1, 2];
+
+for (let i = 0; i < 15; i++) {
+    let studyGroupId = studyGroupIds[(i % 2) ];
+    let newData = { ...data };
+
+    newData.id = i + 1;
+    newData.email = `example${i + 1}@gmail.com`;
+    newData.username = `user${i + 1}`;
+    console.log(studyGroupId + '-')
+    newData.study_group = {...data.study_group}
+    newData.study_group.id = studyGroupId;
+    users.push(newData);
+}
+
+console.log(users)
+let grades = [
+    {
+        id: 1,
+        student_grades: 86,
+        student: 2,
+        subject: 1
+    },
+    {
+        id: 2,
+        student_grades: 76,
+        student: 2,
+        subject: 2
+    },
+    {
+        id: 3,
+        student_grades: 66,
+        student: 2,
+        subject: 3
+    },
+    {
+        id: 4,
+        student_grades: 66,
+        student: 1,
+        subject: 1
+    },
+    {
+        id: 5,
+        student_grades: 76,
+        student: 1,
+        subject: 2
+    },
+    {
+        id: 6,
+        student_grades: 86,
+        student: 1,
+        subject: 3
+    },
+
+]
+const ctx = document.getElementById('personalChart');
+let chartData = []
+let grades_for_chart=[];
+
+let char = new Chart(ctx, {
     type: 'bar',
     data: {
-        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        labels: ["60-70", "71-80", "81-90", "91-100"],
         datasets: [{
             label: '# of Votes',
-            data: [12, 19, 3, 5, 2, 3],
-            borderWidth: 1
+            data: chartData,
+            backgroundColor: "#FFE9B1",
+            borderWidth: 5,
+            borderRadius: 30,
+            borderColor: "#ebd6a2"
+
         }]
     },
     options: {
@@ -356,4 +314,49 @@ new Chart(ctx, {
         }
     }
 });
+let confirmSubject = (subject_ID) => {
+    subject_id = subject_ID;
+    let filtered_grades = grades.filter(grade => subject_id === grade.subject);
+    let grades_amount = [];
+    for (const filteredGrade of filtered_grades) {
+        grades_amount.push(filteredGrade.student_grades);
+    }
+    grades_for_chart = getAmountOfGrades(grades_amount);
+    console.log(grades_for_chart)
+    Chart.defaults.color = '#FFE9B1';
+    chartData= grades_for_chart;
+    char.destroy()
+    char = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["60-70", "71-80", "81-90", "91-100"],
+            datasets: [{
+                label: '# of Votes',
+                data: chartData,
+                backgroundColor: "#FFE9B1",
+                borderWidth: 5,
+                borderRadius: 30,
+                borderColor: "#ebd6a2"
+
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
+                }
+            }
+        }
+    });
+
+}
+
+
+
+
+
+
+
+
+
 
