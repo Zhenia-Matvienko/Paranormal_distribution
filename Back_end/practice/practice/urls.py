@@ -19,7 +19,7 @@ from django.urls import path, include
 
 from distribution.views import StudyGroupListCreateAPIView, UserListCreateAPIView, \
     UserRetrieveUpdateDestroyAPIView, SubjectListCreateAPIView, GradeListCreateAPIView, \
-    GradeRetrieveUpdateDestroyAPIView
+    GradeRetrieveUpdateDestroyAPIView, GradesByStudentAPIView
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -30,6 +30,7 @@ urlpatterns = [
     path('subjects/', SubjectListCreateAPIView.as_view(), name='subject-list-create'),
     path('grades/', GradeListCreateAPIView.as_view(), name='grade-list-create'),
     path('grades/<int:pk>/', GradeRetrieveUpdateDestroyAPIView.as_view(), name='grade-retrieve-update-destroy'),
+    path('grades/student/<int:student_id>/', GradesByStudentAPIView.as_view(), name='grades-by-student'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
 ]
