@@ -1,0 +1,12 @@
+Before using this script for filling database tables of the Paranormal Distribution project with data in the SQLite DBMS, 
+you have to delete absolutely all raws (exception - line with the admin account) in database tables: 
+
+distribution_subject, 
+distribution_grade, 
+distribution_customuser_user_permissions, 
+distribution_customuser_groups, 
+distribution_customuser, 
+distribution_studygroup. 
+
+Next step, in opened project (in PyCharm IDE), write the commands mentioned in this script in terminal 
+(be in folder ...\Paranormal_distribution\Back_end\practice).
