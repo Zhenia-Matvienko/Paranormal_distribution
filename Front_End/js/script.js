@@ -84,9 +84,9 @@ var table = new Tabulator("#example-table", {
 
     ],
 });
-document.getElementById("add-row").addEventListener("click", function(){
-    table.addRow({}, false);
-});
+// document.getElementById("add-row").addEventListener("click", function(){
+//     table.addRow({}, false);
+// });
 
 
 
@@ -181,45 +181,179 @@ new Chart("myChart",
         }
     });
 
-new Chart("personalChart",
-    {
-        type: "bar",
-        data: {
-            labels: ["60-70", "71-80", "81-90", "91-100"],
-            datasets: [{
-                label: 'Amount of students',
-                backgroundColor: "#FFE9B1",
-                borderRadius: 15,
-                fontColor: "#FCFDF2",
-                borderWidth: 4,
-                data: getAmountOfGrades(getGradesFromData(tabledata)),
-            }]
+let subjects = [
+        {
+            id: 1,
+            "subject_name": "Math",
+            "is_private": false,
+            "accept_grades": true
         },
-        options: {
-            title: {
-                display: true,
-                text: "Distribution",
-                fontColor: "#FCFDF2"
-            },
-            legend: {
-                labels: {
-                    fontColor: "#FCFDF2"
-                },
-            },
-            scales: {
-                yAxes: [{
+        {
+            "id": 2,
+            "subject_name": "KS",
+            "is_private": false,
+            "accept_grades": false
+        },
+        {
+            "id": 3,
+            "subject_name": "PTZA",
+            "is_private": false,
+            "accept_grades": true
+        },
+        {
+            "id": 4,
+            "subject_name": "SPZ",
+            "is_private": false,
+            "accept_grades": true
+        }
+    ]
+let users = [
+    {
+        "id": 2,
+        "email": "skete2002@gmail.com",
+        "username": "pilcher",
+        "study_group": {
+            "id": 1,
+            "study_group_name": "123"
+        }
+    },
+    {
+        "id": 3,
+        "email": "example1@example.com",
+        "username": "user1",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 4,
+        "email": "example2@example.com",
+        "username": "user2",
+        "study_group": {
+            "id": 1,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 5,
+        "email": "example3@example.com",
+        "username": "user3",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 6,
+        "email": "example4@example.com",
+        "username": "user4",
+        "study_group": {
+            "id": 1,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 7,
+        "email": "example5@example.com",
+        "username": "user5",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 8,
+        "email": "example6@example.com",
+        "username": "user6",
+        "study_group": {
+            "id": 1,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 9,
+        "email": "example7@example.com",
+        "username": "user7",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 10,
+        "email": "example8@example.com",
+        "username": "user8",
+        "study_group": {
+            "id": 1,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 11,
+        "email": "example9@example.com",
+        "username": "user9",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 12,
+        "email": "example10@example.com",
+        "username": "user10",
+        "study_group": {
+            "id": 1,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 13,
+        "email": "example11@example.com",
+        "username": "user11",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 14,
+        "email": "example12@example.com",
+        "username": "user12",
+        "study_group": {
+            "id": 1,
+            "study_group_name": ""
+        }
+    },
+    {
+        "id": 15,
+        "email": "example13@example.com",
+        "username": "user13",
+        "study_group": {
+            "id": 2,
+            "study_group_name": ""
+        }
+    }
+]
 
-                    ticks: {
+const ctx = document.getElementById('personalChart');
 
-                        fontColor: "#FCFDF2"
-                    },
-                }],
-                xAxes: [{
-                    ticks: {
-                        fontColor: "#FCFDF2"
-                    },
-                }]
+new Chart(ctx, {
+    type: 'bar',
+    data: {
+        labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
+        datasets: [{
+            label: '# of Votes',
+            data: [12, 19, 3, 5, 2, 3],
+            borderWidth: 1
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
             }
         }
-    });
+    }
+});
 
