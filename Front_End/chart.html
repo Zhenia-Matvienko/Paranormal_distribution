@@ -20,7 +20,7 @@
     <button class="btnclose" onclick="w3_close()">Close &times;</button>
     <a href="index.html" class="textheader columns">Головна</a>
     <a href="chart.html" class="textheader columns">Графіки</a>
-    <a href="#" class="textheader columns">Редагування оцінок</a>
+    <a href="table.html" class="textheader columns">Редагування оцінок</a>
 </div>
 <header class="" id="main">
     <div class="header">
@@ -44,17 +44,26 @@
     </div>
 </header>
 <main id = "main1">
-    <div id="subject_name">
 
-    </div>
-    <div class="dropdown">
-        <button class="dropbtn">Dropdown</button>
-        <div class="dropdown-content" id="dropdown_list">
-<!--                script there-->
+    <div id="chart_panel">
+        <div class="dropdown">
+            <button class="dropbtn">Dropdown</button>
+            <div class="dropdown-content" id="dropdown_list">
+                <!--                script there-->
+            </div>
         </div>
+        <label class="container">Загальне
+            <input type="checkbox" id="chart_checkbox" onclick="()">
+            <span class="checkmark"></span>
+        </label>
     </div>
     <div>
-        <canvas id="personalChart"></canvas>
+        <div id="subject_name">
+
+        </div>
+        <div>
+            <canvas id="personalChart"></canvas>
+        </div>
     </div>
 
 </main>
