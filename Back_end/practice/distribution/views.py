@@ -44,6 +44,7 @@ class GradeRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
 
 
 class GradesByStudentAPIView(APIView):
+
     def get(self, request, student_id):
         grades = Grade.objects.filter(student=student_id)
         serializer = GradeSerializer(grades, many=True)

@@ -176,10 +176,10 @@ function getAmountOfGrades(grades) {
             grade90 += 1;
         }
     }
+
     amount.push(grade60,grade70,grade80, grade90);
     return amount;
 }
-
 
 new Chart("myChart",
     {
@@ -283,7 +283,7 @@ for (let i = 0; i < 15; i++) {
     newData.id = i + 1;
     newData.email = `example${i + 1}@gmail.com`;
     newData.username = `user${i + 1}`;
-   // console.log(studyGroupId + '-')
+    console.log(studyGroupId + '-')
     newData.study_group = {...data.study_group}
     newData.study_group.id = studyGroupId;
     users.push(newData);
@@ -327,29 +327,19 @@ let grades = [
         student: 1,
         subject: 3
     },
-    {
-        id: 7,
-        student_grades: 87,
-        student: 2,
-        subject: 1
-    },
 
 ]
 const ctx = document.getElementById('personalChart');
-let chartData = [];
-let chartData1 = [];
-let chartData2 = [];
-let grades_for_chart =[];
-let grades_for_chart1=[];
-let grades_for_chart2=[];
-Chart.defaults.color = '#FFE9B1';
+let chartData = []
+let grades_for_chart=[];
+
 let char = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ["60-70", "71-80", "81-90", "91-100"],
         datasets: [{
-            label: 'Amount of grades',
-            data: chartData1,
+            label: '# of Votes',
+            data: chartData,
             backgroundColor: "#FFE9B1",
             borderWidth: 5,
             borderRadius: 30,
@@ -369,97 +359,38 @@ let confirmSubject = (subject_ID) => {
     subject_id = subject_ID;
     let filtered_grades = grades.filter(grade => subject_id === grade.subject);
     let grades_amount = [];
-    let grades_amount1 = [];
-    let grades_amount2 = [];
     for (const filteredGrade of filtered_grades) {
-        grades_amount.push(filteredGrade.student_grades)
-        for (const user of users) {
-                if(filteredGrade.student === user.id){
-                    if (user.study_group.id === 1){
-                        grades_amount1.push(filteredGrade.student_grades);
-                    } else {
-                        grades_amount2.push(filteredGrade.student_grades);
-                    }
-                }
-        }
-
+        grades_amount.push(filteredGrade.student_grades);
     }
-    let subject = subjects.filter(subject => subject_ID === subject.id)
-    document.getElementById(`subject_name`).innerHTML = `<p>${subject[0].subject_name}</p>`;
-    grades_for_chart1 = getAmountOfGrades(grades_amount1);
-    grades_for_chart2 = getAmountOfGrades(grades_amount2);
-    grades_for_chart = getAmountOfGrades(grades_amount)
-    console.log(grades_for_chart1)
-    chartData = grades_for_chart;
-    chartData1 = grades_for_chart1;
-    chartData2 = grades_for_chart2;
+    grades_for_chart = getAmountOfGrades(grades_amount);
+    console.log(grades_for_chart)
+    Chart.defaults.color = '#FFE9B1';
+    chartData= grades_for_chart;
     char.destroy()
+    char = new Chart(ctx, {
+        type: 'bar',
+        data: {
+            labels: ["60-70", "71-80", "81-90", "91-100"],
+            datasets: [{
+                label: '# of Votes',
+                data: chartData,
+                backgroundColor: "#FFE9B1",
+                borderWidth: 5,
+                borderRadius: 30,
+                borderColor: "#ebd6a2"
 
-    let checkbox = document.getElementById('chart_checkbox');
-
-        if (checkbox.checked) {
-            char = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ["60-70", "71-80", "81-90", "91-100"],
-                    datasets: [{
-                        label: 'All groops',
-                        data: chartData,
-                        backgroundColor: "#FFE9B1",
-                        borderWidth: 5,
-                        borderRadius: 30,
-                        borderColor: "#ebd6a2"
-
-                    }
-                    ]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
+            }]
+        },
+        options: {
+            scales: {
+                y: {
+                    beginAtZero: true
                 }
-            });
-
+            }
         }
-        else {
-            char = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ["60-70", "71-80", "81-90", "91-100"],
-                    datasets: [{
-                        label: 'Amount of grades',
-                        data: chartData1,
-                        backgroundColor: "#FFE9B1",
-                        borderWidth: 5,
-                        borderRadius: 30,
-                        borderColor: "#ebd6a2"
-
-                    },
-                        {
-                            label: 'Amount of grades',
-                            data: chartData2,
-                            backgroundColor: "#b4ff85",
-                            borderWidth: 5,
-                            borderRadius: 30,
-                            borderColor: "#9cde73"
-
-                        }]
-                },
-                options: {
-                    scales: {
-                        y: {
-                            beginAtZero: true
-                        }
-                    }
-                }
-            });
-        }
+    });
 
 }
-
-
 
 
 
