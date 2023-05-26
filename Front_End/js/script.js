@@ -1,5 +1,46 @@
 let subject_id;
+function LogIn(){
+    // Get the form input values
+    var username = document.querySelector('input[name="username"]').value;
+    var password = document.querySelector('input[name="password"]').value;
+  
+    // Create the request body
+    var requestBody = {
+      username: username,
+      password: password
+    };
+  
+    // Send the login request
+    fetch('http://127.0.0.1:8000/auth/token/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBody)
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the response
+        if (data && data.auth_token) {
+          // Token exists, do something with it
+          var token = data.auth_token;
+          console.log('Token:', token);
+          document.cookie = token;
+          let x = document.cookie;
+          console.log('Token:', x);
+          // Perform further actions with the token
+          //window.location.href = 'index.html'; // Redirect to index.html
+        } else {
+          // No token found or an error occurred
+          console.log('Login failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+    }
 
+      
 
 function w3_open() {
     document.getElementById("main").style.marginLeft = "10%";

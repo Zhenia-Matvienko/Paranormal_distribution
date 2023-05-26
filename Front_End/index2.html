@@ -18,19 +18,19 @@
 <body>
 
 <main>
-    <form action="index.html">
-        <input type="username" name="username" placeholder="login" required>
+    <form id="loginForm" action="javascript:LogIn();">
+        <input type="text" name="username" placeholder="login" required>
         <input type="password" name="password" placeholder="password" required>
         <div class="sign_in">
-            <input type="submit" id="submit" value="SIGN IN">
-            <button id="sign_up"> sign up</button>
+          <input type="submit" id="submit" value="SIGN IN">
+          <button id="sign_up" >Sign up</button>
         </div>
         <hr style="width: 80%; margin-top: 0">
-        <label id="continue">continue with <input type="button" id="google" value="Google"></label>
-    </form>
+        <label id="continue">Continue with <input type="button" id="google" value="Google"></label>
+      </form>
     <div class="pattern"></div>
 
 </main>
-
+<script src="js/script.js"></script>
 </body>
 </html>
