@@ -49,3 +49,17 @@ class GradesByStudentAPIView(APIView):
         grades = Grade.objects.filter(student=student_id)
         serializer = GradeSerializer(grades, many=True)
         return Response(serializer.data)
+
+
+class NonPrivateSubjectsAPIView(APIView):
+    def get(self, request):
+        subjects = Subject.objects.filter(is_private=False)
+        serializer = SubjectSerializer(subjects, many=True)
+        return Response(serializer.data)
+
+
+class SubjectsAcceptingGradesAPIView(APIView):
+    def get(self, request):
+        subjects = Subject.objects.filter(accept_grades=True)
+        serializer = SubjectSerializer(subjects, many=True)
+        return Response(serializer.data)
