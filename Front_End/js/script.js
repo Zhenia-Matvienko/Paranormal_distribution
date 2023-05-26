@@ -24,12 +24,10 @@ function LogIn(){
         if (data && data.auth_token) {
           // Token exists, do something with it
           var token = data.auth_token;
-          console.log('Token:', token);
-          document.cookie = token;
+          document.cookie = "token=" + token;
           let x = document.cookie;
-          console.log('Token:', x);
           // Perform further actions with the token
-          //window.location.href = 'index.html'; // Redirect to index.html
+          window.location.href = 'index.html'; // Redirect to index.html
         } else {
           // No token found or an error occurred
           console.log('Login failed');
@@ -40,7 +38,138 @@ function LogIn(){
       });
     }
 
-      
+
+    function getCookie(cname) {
+        let name = cname + "=";
+        let decodedCookie = decodeURIComponent(document.cookie);
+        let ca = decodedCookie.split(';');
+        for(let i = 0; i <ca.length; i++) {
+          let c = ca[i];
+          while (c.charAt(0) == ' ') {
+            c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+            return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+      }
+
+
+// let users;
+// let subjects;
+// let grades;
+// let userID;
+// let userGrad;
+function fetchUserData() {
+  return fetch('http://127.0.0.1:8000/users/')
+    .then(response => response.json())
+    .then(data => {
+      users = data; // Assign the retrieved user data to the user variable
+    });
+}
+
+function fetchSubjectsData() {
+    return fetch('http://127.0.0.1:8000/subjects/')
+      .then(response => response.json())
+      .then(data => {
+        subjects = data; // Assign the retrieved grades data to the grades variable
+      });
+  }
+
+function fetchGradesData() {
+  return fetch('http://127.0.0.1:8000/grades/')
+    .then(response => response.json())
+    .then(data => {
+      grades = data; // Assign the retrieved grades data to the grades variable
+    });
+}
+function fetchUserGrades(){
+
+    return fetch('http://127.0.0.1:8000/grades/student/'+getCookie("id")+"/", {
+    method: 'GET',
+    headers: {
+
+        'Content-Type': 'application/json',
+        'Authorization': 'Token 3719cdebcd1e1429160b0fde26572b4b819fc78a'
+    },
+
+    })
+      .then(response => response.json())
+      .then(data => {
+        userGrad = data; // Assign the retrieved grades data to the grades variable
+      });
+}
+function fetchUserID() {
+    return fetch('http://127.0.0.1:8000/auth/users/me/', {
+    method: 'GET',
+    headers: {
+
+        'Content-Type': 'application/json',
+        'Authorization': 'Token 3719cdebcd1e1429160b0fde26572b4b819fc78a'
+    },
+
+    })
+      .then(response => response.json())
+      .then(data => {
+        userID = data.id; // Assign the retrieved grades data to the grades variable
+        document.cookie = "id="+userID;
+      });
+  }
+Promise.all([fetchUserData(), fetchGradesData(), fetchSubjectsData(), fetchUserID(), fetchUserGrades()])
+  .then(() => {
+    // Both fetch requests have completed, and the data is available
+    // console.log(users);
+    console.log(subjects);
+    // console.log(grades);
+    // console.log(userID);
+    // Find the grades for the user with ID 2
+    console.log(getCookie("id"));
+    const userGrades = grades.filter(grade => grade.student === userID);
+    console.log(userGrad);
+    console.log(userGrades);
+    const mergedTable = subjects.map(subject => {
+        const grade = grades.find(grade => grade.subject === subject.id);
+        return { subject: subject.subject_name, grade: grade ? grade.student_grades : "" };
+    })
+    //console.log(mergedTable)
+    var table = new Tabulator("#example-table", {
+        data:mergedTable,           //load row data from array
+        layout:"fitColumns",      //fit columns to width of table
+        responsiveLayout:"hide",  //hide columns that dont fit on the table
+        addRowPos:"top",          //when adding a new row, add it to the top of the table
+        history:true,             //allow undo and redo actions on the table
+        //pagination:"local",       //paginate the data
+        //paginationSize:7,         //allow 7 rows per page of data
+        //paginationCounter:"rows", //display count of paginated rows in footer
+        movableColumns:true,      //allow column order to be changed
+        initialSort:[             //set the initial sort order of the data
+            {column:"name", dir:"asc"},
+        ],
+        //columnDefaults:{
+        //    tooltip:true,         //show tool tips on cells
+        //},
+        rowFormatter:function(row){
+            row.getElement().style.backgroundColor = "#3B3486";
+        },
+        columns:[                 //define the table columns
+            {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
+                    var value = cell.getValue();
+                    return "<span style='color:#ffffff;'>" + value + "</span>";
+                }},
+            {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
+                    var value = cell.getValue();
+                    return "<span style='color:#ffffff;'>" + value + "</span>";
+                }},
+
+        ],
+    })
+  .catch(error => {
+    console.error('Error:', error);
+  });
+});
+
+
 
 function w3_open() {
     document.getElementById("main").style.marginLeft = "10%";
@@ -87,45 +216,45 @@ function respoonseClose(){
 
 
 
-var table = new Tabulator("#example-table", {
-    data:tabledata,           //load row data from array
-    layout:"fitColumns",      //fit columns to width of table
-    responsiveLayout:"hide",  //hide columns that dont fit on the table
-    addRowPos:"top",          //when adding a new row, add it to the top of the table
-    history:true,             //allow undo and redo actions on the table
-    //pagination:"local",       //paginate the data
-    //paginationSize:7,         //allow 7 rows per page of data
-    //paginationCounter:"rows", //display count of paginated rows in footer
-    movableColumns:true,      //allow column order to be changed
-    initialSort:[             //set the initial sort order of the data
-        {column:"name", dir:"asc"},
-    ],
-    //columnDefaults:{
-    //    tooltip:true,         //show tool tips on cells
-    //},
-    rowFormatter:function(row){
-        row.getElement().style.backgroundColor = "#3B3486";
-    },
-    columns:[                 //define the table columns
-        {title:"ID", field:"id",  width:50, editor:"input", formatter:function(cell, formatterParams){
-                var value = cell.getValue();
-                return "<span style='color:#ffffff;'>" + value + "</span>";
-            }},
-        {title:"Name", field:"name", width:150, formatter:function(cell, formatterParams){
-                var value = cell.getValue();
-                return "<span style='color:#ffffff;'>" + value + "</span>";
-            }},
-        {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
-                var value = cell.getValue();
-                return "<span style='color:#ffffff;'>" + value + "</span>";
-            }},
-        {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
-                var value = cell.getValue();
-                return "<span style='color:#ffffff;'>" + value + "</span>";
-            }},
+// var table = new Tabulator("#example-table", {
+//     data:tabledata,           //load row data from array
+//     layout:"fitColumns",      //fit columns to width of table
+//     responsiveLayout:"hide",  //hide columns that dont fit on the table
+//     addRowPos:"top",          //when adding a new row, add it to the top of the table
+//     history:true,             //allow undo and redo actions on the table
+//     //pagination:"local",       //paginate the data
+//     //paginationSize:7,         //allow 7 rows per page of data
+//     //paginationCounter:"rows", //display count of paginated rows in footer
+//     movableColumns:true,      //allow column order to be changed
+//     initialSort:[             //set the initial sort order of the data
+//         {column:"name", dir:"asc"},
+//     ],
+//     //columnDefaults:{
+//     //    tooltip:true,         //show tool tips on cells
+//     //},
+//     rowFormatter:function(row){
+//         row.getElement().style.backgroundColor = "#3B3486";
+//     },
+//     columns:[                 //define the table columns
+//         {title:"ID", field:"id",  width:50, editor:"input", formatter:function(cell, formatterParams){
+//                 var value = cell.getValue();
+//                 return "<span style='color:#ffffff;'>" + value + "</span>";
+//             }},
+//         {title:"Name", field:"name", width:150, formatter:function(cell, formatterParams){
+//                 var value = cell.getValue();
+//                 return "<span style='color:#ffffff;'>" + value + "</span>";
+//             }},
+//         {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
+//                 var value = cell.getValue();
+//                 return "<span style='color:#ffffff;'>" + value + "</span>";
+//             }},
+//         {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
+//                 var value = cell.getValue();
+//                 return "<span style='color:#ffffff;'>" + value + "</span>";
+//             }},
 
-    ],
-});
+//     ],
+// });
 // document.getElementById("add-row").addEventListener("click", function(){
 //     table.addRow({}, false);
 // });
@@ -176,10 +305,10 @@ function getAmountOfGrades(grades) {
             grade90 += 1;
         }
     }
-
     amount.push(grade60,grade70,grade80, grade90);
     return amount;
 }
+
 
 new Chart("myChart",
     {
@@ -283,7 +412,7 @@ for (let i = 0; i < 15; i++) {
     newData.id = i + 1;
     newData.email = `example${i + 1}@gmail.com`;
     newData.username = `user${i + 1}`;
-    console.log(studyGroupId + '-')
+   // console.log(studyGroupId + '-')
     newData.study_group = {...data.study_group}
     newData.study_group.id = studyGroupId;
     users.push(newData);
@@ -327,19 +456,29 @@ let grades = [
         student: 1,
         subject: 3
     },
+    {
+        id: 7,
+        student_grades: 87,
+        student: 2,
+        subject: 1
+    },
 
 ]
 const ctx = document.getElementById('personalChart');
-let chartData = []
-let grades_for_chart=[];
-
+let chartData = [];
+let chartData1 = [];
+let chartData2 = [];
+let grades_for_chart =[];
+let grades_for_chart1=[];
+let grades_for_chart2=[];
+Chart.defaults.color = '#FFE9B1';
 let char = new Chart(ctx, {
     type: 'bar',
     data: {
         labels: ["60-70", "71-80", "81-90", "91-100"],
         datasets: [{
-            label: '# of Votes',
-            data: chartData,
+            label: 'Amount of grades',
+            data: chartData1,
             backgroundColor: "#FFE9B1",
             borderWidth: 5,
             borderRadius: 30,
@@ -359,38 +498,97 @@ let confirmSubject = (subject_ID) => {
     subject_id = subject_ID;
     let filtered_grades = grades.filter(grade => subject_id === grade.subject);
     let grades_amount = [];
+    let grades_amount1 = [];
+    let grades_amount2 = [];
     for (const filteredGrade of filtered_grades) {
-        grades_amount.push(filteredGrade.student_grades);
-    }
-    grades_for_chart = getAmountOfGrades(grades_amount);
-    console.log(grades_for_chart)
-    Chart.defaults.color = '#FFE9B1';
-    chartData= grades_for_chart;
-    char.destroy()
-    char = new Chart(ctx, {
-        type: 'bar',
-        data: {
-            labels: ["60-70", "71-80", "81-90", "91-100"],
-            datasets: [{
-                label: '# of Votes',
-                data: chartData,
-                backgroundColor: "#FFE9B1",
-                borderWidth: 5,
-                borderRadius: 30,
-                borderColor: "#ebd6a2"
-
-            }]
-        },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true
+        grades_amount.push(filteredGrade.student_grades)
+        for (const user of users) {
+                if(filteredGrade.student === user.id){
+                    if (user.study_group.id === 1){
+                        grades_amount1.push(filteredGrade.student_grades);
+                    } else {
+                        grades_amount2.push(filteredGrade.student_grades);
+                    }
                 }
-            }
         }
-    });
+
+    }
+    let subject = subjects.filter(subject => subject_ID === subject.id)
+    document.getElementById(`subject_name`).innerHTML = `<p>${subject[0].subject_name}</p>`;
+    grades_for_chart1 = getAmountOfGrades(grades_amount1);
+    grades_for_chart2 = getAmountOfGrades(grades_amount2);
+    grades_for_chart = getAmountOfGrades(grades_amount)
+    console.log(grades_for_chart1)
+    chartData = grades_for_chart;
+    chartData1 = grades_for_chart1;
+    chartData2 = grades_for_chart2;
+    char.destroy()
+
+    let checkbox = document.getElementById('chart_checkbox');
+
+        if (checkbox.checked) {
+            char = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["60-70", "71-80", "81-90", "91-100"],
+                    datasets: [{
+                        label: 'All groops',
+                        data: chartData,
+                        backgroundColor: "#FFE9B1",
+                        borderWidth: 5,
+                        borderRadius: 30,
+                        borderColor: "#ebd6a2"
+
+                    }
+                    ]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+
+        }
+        else {
+            char = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ["60-70", "71-80", "81-90", "91-100"],
+                    datasets: [{
+                        label: 'Amount of grades',
+                        data: chartData1,
+                        backgroundColor: "#FFE9B1",
+                        borderWidth: 5,
+                        borderRadius: 30,
+                        borderColor: "#ebd6a2"
+
+                    },
+                        {
+                            label: 'Amount of grades',
+                            data: chartData2,
+                            backgroundColor: "#b4ff85",
+                            borderWidth: 5,
+                            borderRadius: 30,
+                            borderColor: "#9cde73"
+
+                        }]
+                },
+                options: {
+                    scales: {
+                        y: {
+                            beginAtZero: true
+                        }
+                    }
+                }
+            });
+        }
 
 }
+
+
 
 
 
