@@ -707,6 +707,7 @@ let confirmSubject = (subject_ID) => {
 
     let norm_checked = document.getElementById('norm_checkbox');
     if (norm_checked.checked) {
+
         document.getElementById('norm_line').style.display = 'true';
         norm_line.destroy();
         norm_line = new Chart(graph, {
