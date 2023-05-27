@@ -11,7 +11,7 @@ class StudyGroup(models.Model):
 
 
 class CustomUser(AbstractUser):
-    study_group = models.ForeignKey(StudyGroup, on_delete=models.CASCADE, blank=True, null=True)
+    study_group = models.ForeignKey(StudyGroup, on_delete=models.CASCADE, blank=False, default=None, null=True )
     groups = models.ManyToManyField(Group, related_name='custom_users')
     user_permissions = models.ManyToManyField(Permission, related_name='custom_users')
 

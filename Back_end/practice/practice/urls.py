@@ -19,7 +19,8 @@ from django.urls import path, include
 
 from distribution.views import StudyGroupListCreateAPIView, UserListCreateAPIView, \
     UserRetrieveUpdateDestroyAPIView, SubjectListCreateAPIView, GradeListCreateAPIView, \
-    GradeRetrieveUpdateDestroyAPIView, GradesByStudentAPIView, NonPrivateSubjectsAPIView, SubjectsAcceptingGradesAPIView
+    GradeRetrieveUpdateDestroyAPIView, GradesByStudentAPIView, NonPrivateSubjectsAPIView, \
+    SubjectsAcceptingGradesAPIView, GoogleLogin
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -35,4 +36,6 @@ urlpatterns = [
     path('grades/student/<int:student_id>/', GradesByStudentAPIView.as_view(), name='grades-by-student'),
     path('auth/', include('djoser.urls')),
     path('auth/', include('djoser.urls.authtoken')),
+    path('auth/google/', GoogleLogin.as_view(), name='google_login'),
+    path('auth/', include('social_django.urls'))
 ]
