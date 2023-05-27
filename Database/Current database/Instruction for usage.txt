@@ -3,6 +3,7 @@ you have to delete absolutely all raws (exception - line with the admin account)
 
 distribution_subject, 
 distribution_grade, 
+authtoken_token,
 distribution_customuser_user_permissions, 
 distribution_customuser_groups, 
 distribution_customuser, 
