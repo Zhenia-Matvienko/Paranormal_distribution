@@ -56,11 +56,15 @@ function LogIn(){
       }
 
 
-// let users;
-// let subjects;
-// let grades;
-// let userID;
-// let userGrad;
+let users;
+let subjects;
+let grades;
+let userID;
+let userGrad;
+let acceptingGrades;
+
+
+
 function fetchUserData() {
   return fetch('http://127.0.0.1:8000/users/')
     .then(response => response.json())
@@ -91,7 +95,7 @@ function fetchUserGrades(){
     headers: {
 
         'Content-Type': 'application/json',
-        'Authorization': 'Token 3719cdebcd1e1429160b0fde26572b4b819fc78a'
+        'Authorization': 'Token '+getCookie("token"),
     },
 
     })
@@ -106,7 +110,7 @@ function fetchUserID() {
     headers: {
 
         'Content-Type': 'application/json',
-        'Authorization': 'Token 3719cdebcd1e1429160b0fde26572b4b819fc78a'
+        'Authorization': 'Token '+getCookie("token"),
     },
 
     })
@@ -116,57 +120,66 @@ function fetchUserID() {
         document.cookie = "id="+userID;
       });
   }
-Promise.all([fetchUserData(), fetchGradesData(), fetchSubjectsData(), fetchUserID(), fetchUserGrades()])
+
+function fetchAcceptingGrades(){
+    return fetch('http://127.0.0.1:8000/subjects/acceptingGrades', {
+    method: 'GET',
+    headers: {
+
+        'Content-Type': 'application/json',
+        'Authorization': 'Token '+getCookie("token"),
+    },
+
+    })
+      .then(response => response.json())
+      .then(data => {
+        acceptingGrades = data; // Assign the retrieved grades data to the grades variable
+      });
+}
+
+function PostGrades(requestBody){
+    return fetch('http://127.0.0.1:8000/grades/', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token '+getCookie("token"),
+        },
+        body: JSON.stringify(requestBody)
+      })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Post request successful:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+}
+
+
+Promise.all([fetchUserData(), fetchGradesData(), fetchSubjectsData(), fetchUserID(), fetchUserGrades(), fetchAcceptingGrades(), PostGrades()])
   .then(() => {
     // Both fetch requests have completed, and the data is available
     // console.log(users);
-    console.log(subjects);
+    //console.log(subjects);
     // console.log(grades);
     // console.log(userID);
     // Find the grades for the user with ID 2
     console.log(getCookie("id"));
-    const userGrades = grades.filter(grade => grade.student === userID);
-    console.log(userGrad);
-    console.log(userGrades);
-    const mergedTable = subjects.map(subject => {
-        const grade = grades.find(grade => grade.subject === subject.id);
-        return { subject: subject.subject_name, grade: grade ? grade.student_grades : "" };
-    })
-    //console.log(mergedTable)
-    var table = new Tabulator("#example-table", {
-        data:mergedTable,           //load row data from array
-        layout:"fitColumns",      //fit columns to width of table
-        responsiveLayout:"hide",  //hide columns that dont fit on the table
-        addRowPos:"top",          //when adding a new row, add it to the top of the table
-        history:true,             //allow undo and redo actions on the table
-        //pagination:"local",       //paginate the data
-        //paginationSize:7,         //allow 7 rows per page of data
-        //paginationCounter:"rows", //display count of paginated rows in footer
-        movableColumns:true,      //allow column order to be changed
-        initialSort:[             //set the initial sort order of the data
-            {column:"name", dir:"asc"},
-        ],
-        //columnDefaults:{
-        //    tooltip:true,         //show tool tips on cells
-        //},
-        rowFormatter:function(row){
-            row.getElement().style.backgroundColor = "#3B3486";
-        },
-        columns:[                 //define the table columns
-            {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
-                    var value = cell.getValue();
-                    return "<span style='color:#ffffff;'>" + value + "</span>";
-                }},
-            {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
-                    var value = cell.getValue();
-                    return "<span style='color:#ffffff;'>" + value + "</span>";
-                }},
+    console.log(getCookie("token"));
+    console.log(acceptingGrades);
 
-        ],
-    })
-  .catch(error => {
-    console.error('Error:', error);
-  });
+    const mergedTable = subjects.reduce((acc, subject) => {
+        const grade = userGrad.find(userGrad => userGrad.subject === subject.id);
+        if (grade) {
+          acc.push({ subject: subject.subject_name, grade: grade.student_grades });
+        }
+        return acc;
+      }, []);
+
+      console.log(mergedTable);
+    if (window.location.pathname.includes("table.html")) {
+    TableCreate(mergedTable);
+    }
 });
 
 
@@ -199,21 +212,96 @@ var tabledata = [
 
 
 
+function TableCreate(mergedTable) {
 
+    var table = new Tabulator("#example-table", {
+        data: mergedTable,
+        layout: "fitColumns",
+        responsiveLayout: "hide",
+        addRowPos: "bottom",
+        history: true,
+        rowFormatter:function(row){
+        row.getElement().style.backgroundColor = "#3B3486";
+        },
+      columns: [
+        {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
+            var value = cell.getValue();
+            return "<span style='color:#ffffff;'>" + value + "</span>";
+        }},
+        {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
+            var value = cell.getValue();
+            return "<span style='color:#ffffff;'>" + value + "</span>";
+        },
+        mutator: function(value) {
+            // Convert the grade value to an integer
+            return parseInt(value);
+        }},
+      ],
+    });
+  
+    // Create the "Add Row" button
+    var dropdown = document.createElement("select");
+    dropdown.style.padding = "6px 12px";
+    dropdown.style.backgroundColor = "#ffc107";
+    dropdown.style.color = "#3B3486";
+    dropdown.style.fontSize = "1rem";
+    dropdown.style.whiteSpace = "nowrap";
+    dropdown.style.margin = "20px 20px 0 90vw";
+    dropdown.style.borderRadius = "10px";
+    dropdown.style.border = "1px solid #3B3486";
+    dropdown.style.cursor = "pointer";
+    dropdown.style.display = "block";
+  
+    // Add option for each subject
+    acceptingGrades.forEach(function (acceptingGrades) {
+      var option = document.createElement("option");
+      option.value = acceptingGrades.id;
+      option.textContent = acceptingGrades.subject_name;
+      dropdown.appendChild(option);
+    });
+  
+    // Add event listener to the dropdown
+    dropdown.addEventListener("change", function () {
+      var selectedSubjectId = dropdown.value;
+      var selectedSubject = subjects.find(function (acceptingGrades) {
+        return acceptingGrades.id === Number(selectedSubjectId);
+      });
+      if (selectedSubject) {
+        table.addRow({ subject: selectedSubject.subject_name, grade:"0" });
+      }
+    });
+  // Create the "Submit" button
+    var addButton = document.createElement("button");
+    addButton.textContent = "Submit";
+    addButton.style.padding = "6px 12px";
+    addButton.style.backgroundColor = "#ffc107";
+    addButton.style.color = "#3B3486";
+    addButton.style.fontSize = "1rem";
+    addButton.style.whiteSpace = "nowrap";
+    addButton.style.margin = "20px 20px 0 90vw";
+    addButton.style.borderRadius = "10px";
+    addButton.style.border = "1px solid #3B3486";
+    addButton.style.cursor = "pointer";
+    addButton.style.display = "block";
+    addButton.addEventListener("click", function () {
+        let datatable = table.getData();
+        console.log(datatable);
+        const SubmitTable = datatable.map(datatable => {
+            const subject = subjects.find(sub => sub.subject_name === datatable.subject);
+            return { student_grades: datatable.grade, subject: subject ? subject.id : '', student: getCookie("id") };
+          });
+        console.log(SubmitTable);
+        SubmitTable.forEach(element => {
+            PostGrades(element);
+        });
+    });
 
-
-function respoonseOpen(){
-    document.getElementById("blur").style.display = "block";
-    document.getElementById("responseOpen").style.display = "none";
-    document.getElementById("overlay").style.display = "block";
-    window.scrollTo(0, -200);
-}
-function respoonseClose(){
-    document.getElementById("overlay").style.display = "none";
-    document.getElementById("blur").style.display = "none";
-    document.getElementById("responseOpen").style.display = "block";
-}
-
+    // Add the button to the document
+    document.body.appendChild(addButton);
+    // Add the dropdown to the document
+    document.body.appendChild(dropdown);
+  
+  }
 
 
 // var table = new Tabulator("#example-table", {
@@ -232,9 +320,9 @@ function respoonseClose(){
 //     //columnDefaults:{
 //     //    tooltip:true,         //show tool tips on cells
 //     //},
-//     rowFormatter:function(row){
-//         row.getElement().style.backgroundColor = "#3B3486";
-//     },
+    // rowFormatter:function(row){
+    //     row.getElement().style.backgroundColor = "#3B3486";
+    // },
 //     columns:[                 //define the table columns
 //         {title:"ID", field:"id",  width:50, editor:"input", formatter:function(cell, formatterParams){
 //                 var value = cell.getValue();
@@ -244,20 +332,21 @@ function respoonseClose(){
 //                 var value = cell.getValue();
 //                 return "<span style='color:#ffffff;'>" + value + "</span>";
 //             }},
-//         {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
-//                 var value = cell.getValue();
-//                 return "<span style='color:#ffffff;'>" + value + "</span>";
-//             }},
-//         {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
-//                 var value = cell.getValue();
-//                 return "<span style='color:#ffffff;'>" + value + "</span>";
-//             }},
+        // {title:"Subject", field:"subject", editor:"input", headerSort:false, formatter:function(cell, formatterParams){
+        //         var value = cell.getValue();
+        //         return "<span style='color:#ffffff;'>" + value + "</span>";
+        //     }},
+        // {title:"Grade", field:"grade", width:95, editor:"input", formatter:function(cell, formatterParams){
+        //         var value = cell.getValue();
+        //         return "<span style='color:#ffffff;'>" + value + "</span>";
+        //     }},
 
 //     ],
 // });
 // document.getElementById("add-row").addEventListener("click", function(){
 //     table.addRow({}, false);
 // });
+
 
 
 
@@ -353,38 +442,38 @@ new Chart("myChart",
 
 
 
-let subjects = [
-    {
-        id: 1,
-        subject_name: "Math",
-        is_private: false,
-        accept_grades: true
-    },
-    {
-        id: 2,
-        subject_name: "KS",
-        is_private: false,
-        accept_grades: true
-    },
-    {
-        id: 3,
-        subject_name: "PTZA",
-        is_private: false,
-        accept_grades: true
-    },
-    {
-        id: 4,
-        subject_name: "SPZ",
-        is_private: false,
-        accept_grades: true
-    },
-    {
-        id: 7,
-        subject_name: "OPD",
-        is_private: false,
-        accept_grades: true
-    }
-]
+// let subjects = [
+//     {
+//         id: 1,
+//         subject_name: "Math",
+//         is_private: false,
+//         accept_grades: true
+//     },
+//     {
+//         id: 2,
+//         subject_name: "KS",
+//         is_private: false,
+//         accept_grades: true
+//     },
+//     {
+//         id: 3,
+//         subject_name: "PTZA",
+//         is_private: false,
+//         accept_grades: true
+//     },
+//     {
+//         id: 4,
+//         subject_name: "SPZ",
+//         is_private: false,
+//         accept_grades: true
+//     },
+//     {
+//         id: 7,
+//         subject_name: "OPD",
+//         is_private: false,
+//         accept_grades: true
+//     }
+// ]
 
 // document.getElementById('subject_name').innerHTML += `<p>${subjects[0].subject_name}</p>`;
 for (const subject of subjects) {
@@ -402,7 +491,7 @@ const data = {
     }
 };
 
-const users = [];
+// const users = [];
 const studyGroupIds = [1, 2];
 
 for (let i = 0; i < 15; i++) {
@@ -419,51 +508,51 @@ for (let i = 0; i < 15; i++) {
 }
 
 console.log(users)
-let grades = [
-    {
-        id: 1,
-        student_grades: 86,
-        student: 2,
-        subject: 1
-    },
-    {
-        id: 2,
-        student_grades: 76,
-        student: 2,
-        subject: 2
-    },
-    {
-        id: 3,
-        student_grades: 66,
-        student: 2,
-        subject: 3
-    },
-    {
-        id: 4,
-        student_grades: 66,
-        student: 1,
-        subject: 1
-    },
-    {
-        id: 5,
-        student_grades: 76,
-        student: 1,
-        subject: 2
-    },
-    {
-        id: 6,
-        student_grades: 86,
-        student: 1,
-        subject: 3
-    },
-    {
-        id: 7,
-        student_grades: 87,
-        student: 2,
-        subject: 1
-    },
+// let grades = [
+//     {
+//         id: 1,
+//         student_grades: 86,
+//         student: 2,
+//         subject: 1
+//     },
+//     {
+//         id: 2,
+//         student_grades: 76,
+//         student: 2,
+//         subject: 2
+//     },
+//     {
+//         id: 3,
+//         student_grades: 66,
+//         student: 2,
+//         subject: 3
+//     },
+//     {
+//         id: 4,
+//         student_grades: 66,
+//         student: 1,
+//         subject: 1
+//     },
+//     {
+//         id: 5,
+//         student_grades: 76,
+//         student: 1,
+//         subject: 2
+//     },
+//     {
+//         id: 6,
+//         student_grades: 86,
+//         student: 1,
+//         subject: 3
+//     },
+//     {
+//         id: 7,
+//         student_grades: 87,
+//         student: 2,
+//         subject: 1
+//     },
 
-]
+// ]
 const ctx = document.getElementById('personalChart');
 let chartData = [];
 let chartData1 = [];
