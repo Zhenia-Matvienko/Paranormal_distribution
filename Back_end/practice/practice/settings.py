@@ -46,6 +46,7 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'djoser',
     "corsheaders",
+    'social_django',
 ]
 
 MIDDLEWARE = [
@@ -159,6 +160,24 @@ DJOSER = {
         'user': 'distribution.serializers.UserSerializer',
     },
 }
+
+SOCIAL_AUTH_GOOGLE_OAUTH2_KEY = '921771508758-vr2rr7t4u0idpm43778d0uvfv8n85tep.apps.googleusercontent.com'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SECRET = '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'
+SOCIAL_AUTH_GOOGLE_OAUTH2_SCOPE = [
+    'profile',
+    'email',
+]
+
+SOCIAL_AUTH_URL_NAMESPACE = 'social'
+SOCIAL_AUTH_GOOGLE_OAUTH2_AUTH_EXTRA_ARGUMENTS = {
+    'access_type': 'offline',
+}
+
+AUTHENTICATION_BACKENDS = [
+    'social_core.backends.google.GoogleOAuth2',
+    'django.contrib.auth.backends.ModelBackend',
+]
+
 CORS_ALLOW_HEADERS = default_headers + ('cache-control',)
 
 CORS_ALLOW_ALL_ORIGINS = True

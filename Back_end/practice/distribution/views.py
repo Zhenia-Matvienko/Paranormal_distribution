@@ -1,10 +1,13 @@
 from django.shortcuts import render
 from rest_framework import generics
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
-from rest_framework.views import APIView
-from rest_framework.response import Response
 from .models import StudyGroup, CustomUser, Subject, Grade
 from .serializers import StudyGroupSerializer, UserSerializer, SubjectSerializer, GradeSerializer
+from rest_framework.views import APIView
+from rest_framework.permissions import AllowAny
+from rest_framework.response import Response
+from rest_framework import status
+from social_django.utils import psa
 
 
 class StudyGroupListCreateAPIView(generics.ListCreateAPIView):
@@ -71,3 +74,26 @@ class SubjectsAcceptingGradesAPIView(APIView):
         subjects = Subject.objects.filter(accept_grades=True)
         serializer = SubjectSerializer(subjects, many=True)
         return Response(serializer.data)
+
+
+class GoogleLogin(APIView):
+    permission_classes = [AllowAny]
+
+    @psa()
+    def post(self, request):
+        # The `request.backend` object will contain the Google OAuth backend
+        # You can use `request.backend.do_auth()` to authenticate the user
+        # and perform any additional actions.
+
+        # For example, you can create a new user or get the authenticated user.
+        user = request.backend.do_auth(request.data.get('access_token'))
+        if user:
+            return Response({
+                'status': 'success',
+                'user_id': user.id,
+            }, status=status.HTTP_200_OK)
+        else:
+            return Response({
+                'status': 'failed',
+                'message': 'Failed to authenticate with Google.',
+            }, status=status.HTTP_401_UNAUTHORIZED)
