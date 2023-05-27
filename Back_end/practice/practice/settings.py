@@ -178,6 +178,8 @@ AUTHENTICATION_BACKENDS = [
     'django.contrib.auth.backends.ModelBackend',
 ]
 
+CORS_ORIGIN_ALLOW_ALL = True
+
 CORS_ALLOW_HEADERS = default_headers + ('cache-control',)
 
 CORS_ALLOW_ALL_ORIGINS = True
