@@ -472,6 +472,31 @@ let grades_for_chart =[];
 let grades_for_chart1=[];
 let grades_for_chart2=[];
 Chart.defaults.color = '#FFE9B1';
+var graph = document.getElementById('norm_line').getContext('2d');
+
+let norm_line = new Chart(graph, {
+    type: 'bar',
+    data: {
+        labels: ["60-70", "71-80", "81-90", "91-100"],
+        datasets: [{
+            label: 'Amount of grades',
+            data: chartData1,
+            backgroundColor: "#FFE9B1",
+            borderWidth: 5,
+            borderRadius: 30,
+            borderColor: "#ebd6a2"
+
+        }]
+    },
+    options: {
+        scales: {
+            y: {
+                beginAtZero: true
+            }
+        }
+    }
+});
+document.getElementById('norm_line').style.display = 'none';
 let char = new Chart(ctx, {
     type: 'bar',
     data: {
@@ -494,6 +519,9 @@ let char = new Chart(ctx, {
         }
     }
 });
+
+
+
 let confirmSubject = (subject_ID) => {
     subject_id = subject_ID;
     let filtered_grades = grades.filter(grade => subject_id === grade.subject);
@@ -518,7 +546,6 @@ let confirmSubject = (subject_ID) => {
     grades_for_chart1 = getAmountOfGrades(grades_amount1);
     grades_for_chart2 = getAmountOfGrades(grades_amount2);
     grades_for_chart = getAmountOfGrades(grades_amount)
-    console.log(grades_for_chart1)
     chartData = grades_for_chart;
     chartData1 = grades_for_chart1;
     chartData2 = grades_for_chart2;
@@ -554,29 +581,29 @@ let confirmSubject = (subject_ID) => {
         }
         else {
             char = new Chart(ctx, {
-                type: 'bar',
-                data: {
-                    labels: ["60-70", "71-80", "81-90", "91-100"],
-                    datasets: [{
-                        label: 'Amount of grades',
-                        data: chartData1,
-                        backgroundColor: "#FFE9B1",
-                        borderWidth: 5,
-                        borderRadius: 30,
-                        borderColor: "#ebd6a2"
-
-                    },
-                        {
+                    type: 'bar',
+                    data: {
+                        labels: ["60-70", "71-80", "81-90", "91-100"],
+                        datasets: [{
                             label: 'Amount of grades',
-                            data: chartData2,
-                            backgroundColor: "#b4ff85",
+                            data: chartData1,
+                            backgroundColor: "#FFE9B1",
                             borderWidth: 5,
                             borderRadius: 30,
-                            borderColor: "#9cde73"
+                            borderColor: "#ebd6a2"
 
-                        }]
-                },
-                options: {
+                        },
+                            {
+                                label: 'Amount of grades',
+                                data: chartData2,
+                                backgroundColor: "#b4ff85",
+                                borderWidth: 5,
+                                borderRadius: 30,
+                                borderColor: "#9cde73"
+
+                            }]
+                    },
+                    options: {
                     scales: {
                         y: {
                             beginAtZero: true
@@ -585,8 +612,116 @@ let confirmSubject = (subject_ID) => {
                 }
             });
         }
+    var xValues = grades_amount.sort((a,b) => a-b);
+
+
+    document.getElementById('norm_line').style.top = '-' + document.getElementById('personalChart').style.height;
+    document.getElementById('norm_line').style.width = document.getElementById('personalChart').style.width;
+    document.getElementById('norm_line').style.width = (parseInt(document.getElementById('norm_line').style.width) - 50) + "px";
+    document.getElementById('norm_line').style.marginLeft = '22%';
+
+    document.getElementById('norm_line').style.height = document.getElementById('personalChart').style.height;
+    document.getElementById('norm_line').style.height = (parseInt(document.getElementById('norm_line').style.height) - 50) + "px";
+
+
+
+    function calculateStandardDeviation(data) {
+        // Вычисляем дисперсию
+        const variance = calculateVariance(data);
+
+        // Вычисляем квадратный корень из дисперсии
+        const standardDeviation = Math.sqrt(variance);
+
+        return standardDeviation;
+    }
+
+    function calculateVariance(data) {
+        // Вычисляем среднее значение
+        const mean = calculateMean(data);
+
+        // Вычисляем квадрат разности для каждого значения
+        const squaredDifferences = data.map((value) => Math.pow(value - mean, 2));
+
+        // Вычисляем среднее значение квадратов разностей
+        const variance = calculateMean(squaredDifferences);
+
+        return variance;
+    }
+
+    function calculateMean(data) {
+        const sum = data.reduce((acc, value) => acc + value, 0);
+        const mean = sum / data.length;
+        return mean;
+    }
+
+
+// Пример использования
+
+
+    var yValues = [];
+    var mean = calculateMean(grades_amount.sort((a,b) => a-b))
+    var stdDev = calculateStandardDeviation(grades_amount.sort((a,b) => a-b))
+    for (var i = 0; i < xValues.length; i++) {
+        var x = xValues[i];
+        var y = (1 / (stdDev * Math.sqrt(2 * Math.PI))) * Math.exp(-Math.pow(x - mean, 2) / (2 * Math.pow(stdDev, 2)));
+        yValues.push(y);
+    }
+
+    let data = {
+        labels: xValues,
+        datasets: [{
+            data: yValues,
+            fill: false,
+            borderColor: '#f7b24a',
+            tension: 0.1
+        }]
+    };
+
+    var options = {
+        plugins: {
+            legend: {
+                display: false
+            }
+        },
+        scales: {
+            x: {
+                display: false,
+                title: {
+                    display: false,
+                    text: 'Значение'
+                }
+            },
+            y: {
+                display: false,
+                title: {
+                    display: false,
+                    text: 'Плотность вероятности'
+                }
+            }
+        }
+    };
+
+    document.getElementById('mediana').innerHTML = calculateMean(grades_amount.sort((a,b) => a-b)).toFixed(2);
+    document.getElementById('std').innerHTML = calculateStandardDeviation(grades_amount.sort((a,b) => a-b)).toFixed(2);
+
+
+    let norm_checked = document.getElementById('norm_checkbox');
+    if (norm_checked.checked) {
+        document.getElementById('norm_line').style.display = 'true';
+        norm_line.destroy();
+        norm_line = new Chart(graph, {
+            type: 'line',
+            data: data,
+            options: options
+        });
+   }
+    else {
+        document.getElementById('norm_line').style.display = 'none';
+    }
+
 
 }
+
 
 
 
