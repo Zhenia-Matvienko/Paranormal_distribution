@@ -19,7 +19,7 @@ class UserCreateSerializer(DjoserUserCreateSerializer):
 
 
 class UserSerializer(DjoserUserSerializer):
-    study_group = StudyGroupSerializer()
+    study_group = serializers.PrimaryKeyRelatedField(queryset=StudyGroup.objects.all(), allow_null=True, required=False)
 
     class Meta(DjoserUserSerializer.Meta):
         model = CustomUser

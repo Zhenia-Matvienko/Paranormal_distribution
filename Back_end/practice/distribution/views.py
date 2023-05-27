@@ -24,6 +24,14 @@ class UserRetrieveUpdateDestroyAPIView(generics.RetrieveUpdateDestroyAPIView):
     serializer_class = UserSerializer
     permission_classes = (IsAuthenticatedOrReadOnly,)
 
+    def perform_update(self, serializer):
+        study_group_id = self.request.data.get('study_group', None)
+        if study_group_id is not None:
+            study_group = StudyGroup.objects.get(pk=study_group_id)
+            serializer.save(study_group=study_group)
+        else:
+            serializer.save()
+
 
 class SubjectListCreateAPIView(generics.ListCreateAPIView):
     queryset = Subject.objects.all()
