@@ -49,6 +49,7 @@ header{
     display: flex;
     text-align: right;
     box-sizing: border-box;
+    margin-right: 10px;
 }
 .btnlogin{
     padding: 6px 12px 6px 12px;

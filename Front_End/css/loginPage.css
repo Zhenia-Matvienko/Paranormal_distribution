@@ -15,13 +15,14 @@ input {
     border: none;
     border-bottom: solid gray 1px;
     width: 80%;
+    background: #FCFDF2;
 
 }
 
 form {
     z-index: 9;
     width: 400px;
-    height: 300px;
+    height: 350px;
     background: #FCFDF2;
     position: absolute;
     display: flex;
@@ -74,21 +75,17 @@ main {;
     font-family: 'Inter';
     font-style: normal;
     font-weight: 500;
-    font-size: 20px;
-    line-height: 24px;
     display: flex;
     align-items: center;
     justify-content: center;
     text-transform: uppercase;
     height: 50px;
-    padding: 14px 0px;
-    gap: 10px;
     background:  #FCFDF2;
     border: #3B3486 solid 3px;
     border-radius: 10px;
     color: #3B3486;
     width: 48%;
-
+    margin-top: 0;
 }
 
 #continue {
@@ -105,7 +102,7 @@ main {;
     color: darkgray;
 }
 
-#google {
+.google {
     font-family: 'Inter';
     font-style: normal;
     font-weight: 800;
@@ -122,4 +119,24 @@ main {;
     border-radius: 10px;
     color: #3B3486;
     width: 30%;
+}
+
+#admin_btn {
+    font-family: 'Inter';
+    font-style: normal;
+    font-weight: 500;
+    font-size: 20px;
+    line-height: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    text-transform: none;
+    height: 50px;
+    padding: 10px;
+    background:  #FCFDF2;
+    border: #3B3486 solid 3px;
+    border-radius: 10px;
+    color: #3B3486;
+    width: 30%;
+    margin-top: 0;
 }
