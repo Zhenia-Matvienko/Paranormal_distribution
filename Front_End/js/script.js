@@ -28,6 +28,7 @@ function LogIn(){
           let x = document.cookie;
           // Perform further actions with the token
           window.location.href = 'index.html'; // Redirect to index.html
+          document.getElementById("btnlogin1").style.display = "none";
         } else {
           // No token found or an error occurred
           console.log('Login failed');
@@ -36,8 +37,88 @@ function LogIn(){
       .catch(error => {
         console.error('Error:', error);
       });
+      
     }
 
+function SignUp(){
+    var username = document.querySelector('input[name="username"]').value;
+    var password = document.querySelector('input[name="password"]').value;
+    var re_password = document.querySelector('input[name="re_password"]').value;
+    var email = document.querySelector('input[name="email"]').value;
+    var ca = document.getElementById("ca");
+    var ma = document.getElementById("ma");
+    var group_id;
+    if(ca.checked){
+        group_id = 3;
+    }else{
+        group_id = 4;
+    }
+    if(password != re_password){
+        alert("Паролі не співпадають");
+        return 0;
+    }
+    var requestBodyCreate = {
+        username: username,
+        password: password,
+        email: email,
+        study_group_id: group_id
+      };
+      console.log(requestBodyCreate);
+    fetch('http://127.0.0.1:8000/auth/users/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBodyCreate)
+    })
+      .then(response => response.json())
+      .then(data => {
+        // Handle the respons
+          console.log('Registration successful');
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+      var requestBodyLog = {
+        username: username,
+        password: password
+      }
+      console.log(requestBodyLog);
+      fetch('http://127.0.0.1:8000/auth/token/login/', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json'
+      },
+      body: JSON.stringify(requestBodyLog)
+    })
+      .then(response => response.json())
+      .then(data => {
+        console.log(data);
+        // Handle the response
+        if (data && data.auth_token) {
+          // Token exists, do something with it
+          var token = data.auth_token;
+          document.cookie = "token=" + token;
+          let x = document.cookie;
+          // Perform further actions with the token
+          window.location.href = 'index.html'; // Redirect to index.html
+          document.getElementById("btnlogin1").style.display = "none";
+        } else {
+          // No token found or an error occurred
+          console.log('Login failed');
+        }
+      })
+      .catch(error => {
+        console.error('Error:', error);
+      });
+
+    }
+
+    function LogOut(){
+        document.cookie = "token="+"";
+        window.location.href = 'index2.html';
+    }
 
     function getCookie(cname) {
         let name = cname + "=";
@@ -203,6 +284,15 @@ Promise.all([fetchUserData(), fetchGradesData(), fetchSubjectsData(), fetchUserI
     console.log(getCookie("token"));
     console.log(acceptingGrades);
 
+    if(getCookie("token").length>0){
+        document.getElementById("btnlogin1").style.display = "none";
+        document.getElementById("btnLogout").style.display = 'block';
+        // var button = document.createElement("button");
+        // document.getElementById("reg_redirect").appendChild(button);
+        // LogOut()
+    }
+    
+
     const mergedTable = subjects.reduce((acc, subject) => {
         const grade = userGrad.find(userGrad => userGrad.subject === subject.id);
         if (grade) {
@@ -311,7 +401,7 @@ function TableCreate(mergedTable) {
     dropdown.style.color = "#3B3486";
     dropdown.style.fontSize = "1rem";
     dropdown.style.whiteSpace = "nowrap";
-    dropdown.style.margin = "20px 20px 0 10vw";
+    dropdown.style.margin = "20px 20px 0 10%";
     dropdown.style.borderRadius = "10px";
     dropdown.style.border = "1px solid #3B3486";
     dropdown.style.cursor = "pointer";
@@ -343,7 +433,7 @@ function TableCreate(mergedTable) {
     addSubj.style.color = "#3B3486";
     addSubj.style.fontSize = "1rem";
     addSubj.style.whiteSpace = "nowrap";
-    addSubj.style.margin = "20px 20px 0 10vw";
+    addSubj.style.margin = "20px 20px 0 10%";
     addSubj.style.borderRadius = "10px";
     addSubj.style.border = "1px solid #3B3486";
     addSubj.style.cursor = "pointer";
@@ -367,7 +457,7 @@ function TableCreate(mergedTable) {
     changeGrades.style.color = "#3B3486";
     changeGrades.style.fontSize = "1rem";
     changeGrades.style.whiteSpace = "nowrap";
-    changeGrades.style.margin = "20px 20px 0 10vw";
+    changeGrades.style.margin = "20px 20px 0 10%";
     changeGrades.style.borderRadius = "10px";
     changeGrades.style.border = "1px solid #3B3486";
     changeGrades.style.cursor = "pointer";
@@ -386,11 +476,11 @@ function TableCreate(mergedTable) {
     });
 
     // Add the button to the document
-    document.body.appendChild(addSubj);
+    document.getElementById("main1").appendChild(addSubj);
     // Add the button to the document
-    document.body.appendChild(changeGrades);
+    document.getElementById("main1").appendChild(changeGrades);
     // Add the dropdown to the document
-    document.body.appendChild(dropdown);
+    document.getElementById("main1").appendChild(dropdown);
   
   }
 
@@ -655,7 +745,7 @@ function TableCreate(mergedTable) {
                         data: {
                             labels: ["60-70", "71-80", "81-90", "91-100"],
                             datasets: [{
-                                label: 'Amount of grades',
+                                label: 'CA',
                                 data: chartData1,
                                 backgroundColor: "#FFE9B1",
                                 borderWidth: 5,
@@ -664,7 +754,7 @@ function TableCreate(mergedTable) {
     
                             },
                                 {
-                                    label: 'Amount of grades',
+                                    label: 'MA',
                                     data: chartData2,
                                     backgroundColor: "#b4ff85",
                                     borderWidth: 5,

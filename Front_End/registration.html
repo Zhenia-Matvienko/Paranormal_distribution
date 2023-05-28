@@ -18,18 +18,18 @@
 <body>
 
 <main>
-  <form id="regForm" action="javascript:LogIn();" style="height: 600px">
+  <form id="regForm" action="javascript:SignUp();" style="height: 600px">
     <input type="username" name="username" placeholder="login" required>
     <input type="email" name="email" placeholder="email" required>
     <input type="password" name="password" placeholder="password" required>
     <input type="password" name="re_password" placeholder="repeat password" required>
     <div style="display: flex; align-items: center; justify-content: space-evenly; width: 100%">
       <label class="container">СА
-          <input type="radio" checked="checked" name="radio">
+          <input id="ca" type="radio" checked="checked" name="radio">
           <span class="checkmark"></span>
       </label>
       <label class="container">МА
-        <input type="radio"  name="radio">
+        <input id="ma" type="radio"  name="radio">
         <span class="checkmark"></span>
       </label>
     </div>
