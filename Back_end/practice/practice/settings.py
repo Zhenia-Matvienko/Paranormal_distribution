@@ -180,4 +180,8 @@ AUTHENTICATION_BACKENDS = [
 
 CORS_ALLOW_HEADERS = default_headers + ('cache-control',)
 
-CORS_ALLOW_ALL_ORIGINS = True
+CORS_ORIGIN_ALLOW_ALL = False
+CORS_ALLOW_CREDENTIALS = True
+CORS_ORIGIN_WHITELIST = [
+    'http://paranormal-distribution.zzz.com.ua',
+]
