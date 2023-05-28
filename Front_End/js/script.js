@@ -392,15 +392,15 @@ function TableCreate(mergedTable) {
         amount.push(grade60,grade70,grade80, grade90);
         return amount;
     }
-    
-    
+
+    Chart.defaults.color = '#FFE9B1';
     new Chart("myChart",
         {
             type: "bar",
             data: {
                 labels: ["60-70", "71-80", "81-90", "91-100"],
                 datasets: [{
-                    label: 'Amount of students',
+                    label: 'Total grades',
                     backgroundColor: "#FFE9B1",
                     borderRadius: 15,
                     fontColor: "#FCFDF2",
@@ -434,7 +434,8 @@ function TableCreate(mergedTable) {
                 }
             }
         });
-    
+
+    document.getElementById('total_grades').innerHTML = `<p>Всього оцінок: ${getGradesFromData(grades).length}</p>`
     
     
     const ctx = document.getElementById('personalChart');
@@ -506,9 +507,9 @@ function TableCreate(mergedTable) {
             grades_amount.push(filteredGrade.student_grades)
             for (const user of users) {
                     if(filteredGrade.student === user.id){
-                        if (user.study_group === 1){
+                        if (user.study_group === 3){
                             grades_amount1.push(filteredGrade.student_grades);
-                        } else {
+                        } else if (user.study_group === 4){
                             grades_amount2.push(filteredGrade.student_grades);
                         }
                     }
