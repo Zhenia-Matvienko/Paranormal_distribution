@@ -8,16 +8,36 @@
     <title>Document</title>
     <link href="https://unpkg.com/tabulator-tables/dist/css/tabulator.min.css" rel="stylesheet">
     <script type="text/javascript" src="https://unpkg.com/tabulator-tables/dist/js/tabulator.min.js"></script>
+    <script src="https://accounts.google.com/gsi/client" async defer></script>
 </head>
 
 <body>
+    <div id="google-signin-button", style="height: 500px;"></div>
     <!-- <div id="example-table"></div> -->
-    <button type="button" onclick = "document.cookie = 'username=tokas; expires=Thu, 01 Jan 2024 11:26:20 UTC; path=/;'">Create Cookie 1</button>
-     <script type="text/javascript"> 
-        document.cookie = "username=tokas;"
-        alert(document.cookie);
-        let x = document.cookie;
-        console.log(x);
+    <script src="https://apis.google.com/js/platform.js" async defer></script>
+    <script type="text/javascript"> 
+function handleGoogleSignIn(response) {
+    // Handle the Google Sign-In response
+    console.log(response);
+    // You can perform further actions based on the response, such as sending the ID token to your server for verification.
+  }
+
+  function startGoogleSignIn() {
+    // Start the Google Sign-In flow
+    gapi.load("auth2", function () {
+      gapi.auth2.init({
+        client_id: "921771508758-vr2rr7t4u0idpm43778d0uvfv8n85tep.apps.googleusercontent.com", // Replace with your Client ID obtained from the Google Cloud Console
+      }).then(function () {
+        gapi.auth2.getAuthInstance().signIn().then(handleGoogleSignIn);
+      });
+    });
+  }
+
+  document.addEventListener("DOMContentLoaded", function () {
+    // Add event listener to the Google Sign-In button
+    var googleSignInButton = document.getElementById("google-signin-button");
+    googleSignInButton.addEventListener("click", startGoogleSignIn);
+  });
     </script>
 </body>
 

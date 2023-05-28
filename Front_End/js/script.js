@@ -155,6 +155,40 @@ function PostGrades(requestBody){
         });
 }
 
+function PatchGrades(requestBody){
+    return fetch('http://127.0.0.1:8000/grades/'+requestBody.id+"/", {
+        method: 'PATCH',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token '+getCookie("token"),
+        },
+        body: JSON.stringify(requestBody)
+      })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Post request successful:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+}
+
+function DeleteGrades(requestBody){
+    return fetch('http://127.0.0.1:8000/grades/'+requestBody+"/", {
+        method: 'DELETE',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': 'Token '+getCookie("token"),
+        },
+      })
+        .then(response => response.json())
+        .then(data => {
+            console.log('Post request successful:', data);
+        })
+        .catch(error => {
+          console.error('Error:', error);
+        });
+}
 
 Promise.all([fetchUserData(), fetchGradesData(), fetchSubjectsData(), fetchUserID(), fetchUserGrades(), fetchAcceptingGrades()])
   .then(() => {
@@ -172,7 +206,7 @@ Promise.all([fetchUserData(), fetchGradesData(), fetchSubjectsData(), fetchUserI
     const mergedTable = subjects.reduce((acc, subject) => {
         const grade = userGrad.find(userGrad => userGrad.subject === subject.id);
         if (grade) {
-          acc.push({ subject: subject.subject_name, grade: grade.student_grades });
+          acc.push({ id: grade.id, subject: subject.subject_name, grade: grade.student_grades });
         }
         return acc;
       }, []);
@@ -215,6 +249,28 @@ var tabledata = [
 
 function TableCreate(mergedTable) {
 
+      function buttonFormatter(cell, formatterParams, onRendered) {
+        var button = document.createElement("button");
+        button.innerHTML = formatterParams.label;
+
+        // Retrieve the ID from the row data
+        var rowData = cell.getRow().getData();
+        var id = rowData.id;
+
+        // Set the ID as a custom attribute of the button
+        button.setAttribute("data-id", id);
+
+        button.addEventListener("click", function () {
+        // Retrieve the ID from the custom attribute of the button
+            var clickedId = this.getAttribute("data-id");
+            console.log(clickedId); // Output the clicked ID to the console
+            DeleteGrades(clickedId);
+            var row = cell.getRow();
+            row.delete();
+        });
+
+        return button;
+    }
     var table = new Tabulator("#example-table", {
         data: mergedTable,
         layout: "fitColumns",
@@ -233,10 +289,18 @@ function TableCreate(mergedTable) {
             var value = cell.getValue();
             return "<span style='color:#ffffff;'>" + value + "</span>";
         },
+        
         mutator: function(value) {
             // Convert the grade value to an integer
             return parseInt(value);
         }},
+        {
+            title: "Actions",
+            formatter: buttonFormatter, // Use the button formatter for this column
+            formatterParams: { label: "Видалити оцінку" }, // Set the button label
+            align: "center",
+            width: 200,
+        },
       ],
     });
   
@@ -247,7 +311,7 @@ function TableCreate(mergedTable) {
     dropdown.style.color = "#3B3486";
     dropdown.style.fontSize = "1rem";
     dropdown.style.whiteSpace = "nowrap";
-    dropdown.style.margin = "20px 20px 0 90vw";
+    dropdown.style.margin = "20px 20px 0 10vw";
     dropdown.style.borderRadius = "10px";
     dropdown.style.border = "1px solid #3B3486";
     dropdown.style.cursor = "pointer";
@@ -272,33 +336,59 @@ function TableCreate(mergedTable) {
       }
     });
   // Create the "Submit" button
-    var addButton = document.createElement("button");
-    addButton.textContent = "Submit";
-    addButton.style.padding = "6px 12px";
-    addButton.style.backgroundColor = "#ffc107";
-    addButton.style.color = "#3B3486";
-    addButton.style.fontSize = "1rem";
-    addButton.style.whiteSpace = "nowrap";
-    addButton.style.margin = "20px 20px 0 90vw";
-    addButton.style.borderRadius = "10px";
-    addButton.style.border = "1px solid #3B3486";
-    addButton.style.cursor = "pointer";
-    addButton.style.display = "block";
-    addButton.addEventListener("click", function () {
+    var addSubj = document.createElement("button");
+    addSubj.textContent = "Додати предмети в базу";
+    addSubj.style.padding = "6px 12px";
+    addSubj.style.backgroundColor = "#ffc107";
+    addSubj.style.color = "#3B3486";
+    addSubj.style.fontSize = "1rem";
+    addSubj.style.whiteSpace = "nowrap";
+    addSubj.style.margin = "20px 20px 0 10vw";
+    addSubj.style.borderRadius = "10px";
+    addSubj.style.border = "1px solid #3B3486";
+    addSubj.style.cursor = "pointer";
+    addSubj.style.display = "block";
+    addSubj.addEventListener("click", function () {
         let datatable = table.getData();
         console.log(datatable);
-        const SubmitTable = datatable.map(datatable => {
+        const SubmitTablePost = datatable.map(datatable => {
             const subject = subjects.find(sub => sub.subject_name === datatable.subject);
             return { student_grades: datatable.grade, subject: subject ? subject.id : '', student: getCookie("id") };
           });
-        console.log(SubmitTable);
-        SubmitTable.forEach(element => {
+        console.log(SubmitTablePost);
+        SubmitTablePost.forEach(element => {
             PostGrades(element);
+        });
+    });
+    var changeGrades = document.createElement("button");
+    changeGrades.textContent = "Змінити оцінки";
+    changeGrades.style.padding = "6px 12px";
+    changeGrades.style.backgroundColor = "#ffc107";
+    changeGrades.style.color = "#3B3486";
+    changeGrades.style.fontSize = "1rem";
+    changeGrades.style.whiteSpace = "nowrap";
+    changeGrades.style.margin = "20px 20px 0 10vw";
+    changeGrades.style.borderRadius = "10px";
+    changeGrades.style.border = "1px solid #3B3486";
+    changeGrades.style.cursor = "pointer";
+    changeGrades.style.display = "block";
+    changeGrades.addEventListener("click", function () {
+        let datatable = table.getData();
+        console.log(datatable);
+        const SubmitTablePatch = datatable.map(datatable => {
+            const subject = subjects.find(sub => sub.subject_name === datatable.subject);
+            return { student_grades: datatable.grade, id: datatable.id };
+          });
+        console.log(SubmitTablePatch);
+        SubmitTablePatch.forEach(element => {
+            PatchGrades(element);
         });
     });
 
     // Add the button to the document
-    document.body.appendChild(addButton);
+    document.body.appendChild(addSubj);
+    // Add the button to the document
+    document.body.appendChild(changeGrades);
     // Add the dropdown to the document
     document.body.appendChild(dropdown);
   
@@ -322,8 +412,10 @@ function TableCreate(mergedTable) {
             </label>
             <label class="container">Медіана: </label>
             <label class="container" id="mediana"></label>
+            <div>
             <label class="container">Стандартне відхилення: </label>
             <label class="container" id="std"></label>
+            </div>
         </div>
         <label class="container">Загальне
             <input type="checkbox" id="chart_checkbox">
@@ -435,7 +527,10 @@ function TableCreate(mergedTable) {
             }
         });
 
-    document.getElementById('total_grades').innerHTML = `<p>Всього оцінок: ${getGradesFromData(grades).length}</p>`
+    if (window.location.pathname.includes("index.html")) {
+        document.getElementById('total_grades').innerHTML = `<p>Всього оцінок: ${getGradesFromData(grades).length}</p>`;
+    }
+    
     
     
     const ctx = document.getElementById('personalChart');
@@ -660,6 +755,9 @@ function TableCreate(mergedTable) {
             },
             scales: {
                 x: {
+                    type: 'linear',
+                    min: 60,
+                    max: 100,
                     display: false,
                     title: {
                         display: false,
