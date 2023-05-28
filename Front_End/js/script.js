@@ -11,7 +11,7 @@ function LogIn(){
     };
   
     // Send the login request
-    fetch('http://6735-193-151-58-83.ngrok-free.app/auth/token/login/', {
+    fetch('http://127.0.0.1:8000/auth/token/login/', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json'
@@ -66,7 +66,7 @@ let acceptingGrades;
 
 
 function fetchUserData() {
-  return fetch('http://6735-193-151-58-83.ngrok-free.app/users/')
+  return fetch('http://127.0.0.1:8000/users/')
     .then(response => response.json())
     .then(data => {
       users = data; // Assign the retrieved user data to the user variable
@@ -74,7 +74,7 @@ function fetchUserData() {
 }
 
 function fetchSubjectsData() {
-    return fetch('http://6735-193-151-58-83.ngrok-free.app/subjects/')
+    return fetch('http://127.0.0.1:8000/subjects/')
       .then(response => response.json())
       .then(data => {
         subjects = data; // Assign the retrieved grades data to the grades variable
@@ -82,7 +82,7 @@ function fetchSubjectsData() {
   }
 
 function fetchGradesData() {
-  return fetch('http://6735-193-151-58-83.ngrok-free.app/grades/')
+  return fetch('http://127.0.0.1:8000/grades/')
     .then(response => response.json())
     .then(data => {
       grades = data; // Assign the retrieved grades data to the grades variable
@@ -90,7 +90,7 @@ function fetchGradesData() {
 }
 function fetchUserGrades(){
 
-    return fetch('http://6735-193-151-58-83.ngrok-free.app/grades/student/'+getCookie("id")+"/", {
+    return fetch('http://127.0.0.1:8000/grades/student/'+getCookie("id")+"/", {
     method: 'GET',
     headers: {
 
@@ -105,7 +105,7 @@ function fetchUserGrades(){
       });
 }
 function fetchUserID() {
-    return fetch('http://6735-193-151-58-83.ngrok-free.app/auth/users/me/', {
+    return fetch('http://127.0.0.1:8000/auth/users/me/', {
     method: 'GET',
     headers: {
 
@@ -122,7 +122,7 @@ function fetchUserID() {
   }
 
 function fetchAcceptingGrades(){
-    return fetch('http://6735-193-151-58-83.ngrok-free.app/subjects/acceptingGrades', {
+    return fetch('http://127.0.0.1:8000/subjects/acceptingGrades', {
     method: 'GET',
     headers: {
 
@@ -138,7 +138,7 @@ function fetchAcceptingGrades(){
 }
 
 function PostGrades(requestBody){
-    return fetch('http://6735-193-151-58-83.ngrok-free.app/grades/', {
+    return fetch('http://127.0.0.1:8000/grades/', {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
