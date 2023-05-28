@@ -1,0 +1,15 @@
+[Hosting server part]
+
+     1. Register your account on the website https://ngrok.com/;
+     2. Open exe-file ngrok.exe (interactive terminal), which is included with this instruction;
+     3. Enter commands in sequence:
+ngrok config add-authtoken {your authentication token from the site}
+ngrok http 8000
+     4. Use the issued link to the server part of the web application (not loopback) to gain access from any client;
+
+[Hosting client part]
+
+     1. Register your account on the website https://www.zzz.com.ua/;
+     2. Create domain of your web application;
+     3. After selecting the "FTP" tab, this new tab will open, where you have to download client part of the web application in archive form;
+     4. Get access to the web application through the domain;
